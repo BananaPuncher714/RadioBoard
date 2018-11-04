@@ -46,14 +46,20 @@ public class GifPlayer extends Thread implements MapDisplayProvider {
 	@Override
 	public void run() {
 		int index = 0;
-		long lastUpdated = 0;
+		long lastUpdated = System.currentTimeMillis();
 		while ( RUNNING ) {
-			if ( System.currentTimeMillis() - lastUpdated > delays[ index ] ) {
+			if ( display != null ) {
 				Frame frame = new Frame( indexes[ index ], width );
 				display.update( frame );
-				index = ( index + 1 ) % indexes.length;
-				lastUpdated = System.currentTimeMillis();
 			}
+			try {
+				// Make up time lost for sending an update to the client
+				Thread.sleep( Math.max( 0, delays[ index ] - ( System.currentTimeMillis() - lastUpdated ) ) );
+			} catch ( InterruptedException e ) {
+				e.printStackTrace();
+			}
+			lastUpdated = System.currentTimeMillis();
+			index = ( index + 1 ) % indexes.length;
 		}
 		display = null;
 	}

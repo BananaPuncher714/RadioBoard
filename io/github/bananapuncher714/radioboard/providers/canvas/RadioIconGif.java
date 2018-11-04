@@ -44,15 +44,19 @@ public class RadioIconGif extends Thread implements RadioIcon {
 	
 	@Override
 	public void run() {
-		long lastUpdated = 0;
+		long lastUpdated = System.currentTimeMillis();
 		while ( RUNNING ) {
-			if ( System.currentTimeMillis() - lastUpdated > delays[ index ] ) {
-				if ( canvas != null ) {
-					canvas.update( this );
-				}
-				index = ( index + 1 ) % indexes.length;
-				lastUpdated = System.currentTimeMillis();
+			if ( canvas != null ) {
+				canvas.update( this );
 			}
+			try {
+				// Make up time lost for sending an update to the client
+				Thread.sleep( Math.max( 0, delays[ index ] - ( System.currentTimeMillis() - lastUpdated ) ) );
+			} catch ( InterruptedException e ) {
+				e.printStackTrace();
+			}
+			lastUpdated = System.currentTimeMillis();
+			index = ( index + 1 ) % indexes.length;
 		}
 		canvas = null;
 	}
