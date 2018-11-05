@@ -417,7 +417,7 @@ public abstract class TinyProtocol {
 	public Channel getChannel( UUID uuid, Object playerConnection ) {
 		Channel channel = uuidChannelLookup.get( uuid );
 		
-		if ( channel == null ) {
+		if ( channel == null && playerConnection != null ) {
 			uuidChannelLookup.put( uuid, channel = getChannel.get( getManager.get( playerConnection ) ) );
 		}
 		
