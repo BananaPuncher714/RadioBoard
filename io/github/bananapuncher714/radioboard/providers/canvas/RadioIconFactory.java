@@ -38,4 +38,8 @@ public class RadioIconFactory {
 	public static RadioIconGif constructGif( File file, int width, int height ) {
 		return new RadioIconGif( file, width, height );
 	}
+	
+	public static RadioIconCloud constructCloud( int width, int height, int transparency, int delay ) {
+		return new RadioIconCloud( width, height, transparency, delay );
+	}
 }

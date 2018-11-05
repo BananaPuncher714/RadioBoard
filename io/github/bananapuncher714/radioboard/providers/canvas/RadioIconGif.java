@@ -91,5 +91,4 @@ public class RadioIconGif extends Thread implements RadioIcon {
 		RUNNING = false;
 		canvas = null;
 	}
-
 }

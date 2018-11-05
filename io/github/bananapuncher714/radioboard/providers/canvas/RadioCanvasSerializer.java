@@ -88,6 +88,11 @@ public class RadioCanvasSerializer {
 				if ( file.exists() ) {
 					icon = RadioIconFactory.constructGif( file, elWidth, elHeight );
 				}
+			} else if ( type.equalsIgnoreCase( "cloud" ) ) {
+				int transparency = ( int ) element.get( "transparency" );
+				int delay  = ( int ) element.get( "delay" );
+				
+				icon = RadioIconFactory.constructCloud( elWidth, elHeight, transparency, delay );
 			}
 
 			if ( icon != null ) {

@@ -152,9 +152,11 @@ public class NMSHandler implements PacketHandler {
 					lastUpdated.put( uuid, System.currentTimeMillis() );
 					PlayerConnection connection = playerConnections.get( uuid );
 					Channel channel = RadioBoard.getInstance().getProtocol().getChannel( uuid, connection );
-					for ( PacketPlayOutMap packet : packetArray ) {
-//						connection.sendPacket( packet );
-						RadioBoard.getInstance().getProtocol().sendPacket( channel, packet );
+					if ( channel != null ) {
+						for ( PacketPlayOutMap packet : packetArray ) {
+//							connection.sendPacket( packet );
+							RadioBoard.getInstance().getProtocol().sendPacket( channel, packet );
+						}
 					}
 				}
 			}
