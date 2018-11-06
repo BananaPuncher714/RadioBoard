@@ -48,6 +48,7 @@ import io.netty.channel.Channel;
 
 public class RadioBoard extends JavaPlugin {
 	private static RadioBoard INSTANCE;
+	private static final String FILE_IMAGES = "/images/";
 	
 	private PacketHandler packetHandler;
 	private TinyProtocol tProtocol;
@@ -130,8 +131,16 @@ public class RadioBoard extends JavaPlugin {
 		return tProtocol;
 	}
 	
+	/**
+	 * Get a file located in the image folder for this plugin
+	 * 
+	 * @param image
+	 * The name of a file
+	 * @return
+	 * A new file in the image folder
+	 */
 	public static File getImageFile( String image ) {
-		return new File( INSTANCE.getDataFolder() + "/images/" + image );
+		return new File( INSTANCE.getDataFolder() + FILE_IMAGES + image );
 	}
 	
 	public static RadioBoard getInstance() {

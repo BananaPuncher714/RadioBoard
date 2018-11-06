@@ -12,6 +12,11 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * A Minecraft-world wall of maps for virtual displays
+ * 
+ * @author BananaPuncher714
+ */
 public class BoardFrame {
 	protected List< UUID > frames = new ArrayList< UUID >();
 	protected int width;
@@ -20,6 +25,14 @@ public class BoardFrame {
 	protected Location topLeft;
 	protected int id;
 	
+	/**
+	 * Given an item frame and a map id, construct a new board
+	 * 
+	 * @param frame
+	 * Any frame on a wall with the same material behind it
+	 * @param id
+	 * The id of the top left map
+	 */
 	public BoardFrame( ItemFrame frame, int id ) {
 		this.id = id;
 		width = 0;
@@ -67,26 +80,55 @@ public class BoardFrame {
 		this.height = height;
 	}
 	
+	/**
+	 * Gets the inverse face of the board
+	 * 
+	 * @return
+	 */
 	public BlockFace getFace() {
 		return face;
 	}
 	
+	/**
+	 * Gets the location of the top left item frame
+	 * 
+	 * @return
+	 */
 	public Location getTopLeftCorner() {
 		return topLeft.clone();
 	}
 	
+	/**
+	 * Gets the map id of the top left frame
+	 * 
+	 * @return
+	 */
 	public int getId() {
 		return id;
 	}
 	
+	/**
+	 * Gets the width in map lengths of this board
+	 * 
+	 * @return
+	 */
 	public int getWidth() {
 		return width;
 	}
 	
+	/**
+	 * Gets the height in map lengths of this board
+	 * @return
+	 */
 	public int getHeight() {
 		return height;
 	}
 	
+	/**
+	 * Gets a list of all the item frames in this board
+	 * 
+	 * @return
+	 */
 	public List< UUID > getFrames() {
 		return frames;
 	}

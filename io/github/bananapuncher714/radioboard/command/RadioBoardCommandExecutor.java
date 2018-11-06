@@ -31,7 +31,7 @@ import io.github.bananapuncher714.radioboard.api.MapDisplayProvider;
 import io.github.bananapuncher714.radioboard.providers.GifPlayer;
 import io.github.bananapuncher714.radioboard.providers.ImageProvider;
 import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvas;
-import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvasSerializer;
+import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvasFactory;
 import io.github.bananapuncher714.radioboard.providers.canvas.RadioIconButton;
 import io.github.bananapuncher714.radioboard.providers.canvas.RadioIconSwitch;
 import io.github.bananapuncher714.radioboard.util.BukkitUtil;
@@ -158,7 +158,7 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 		FrameManager.INSTANCE.registerDisplay( display );
 		
 		FileConfiguration config = YamlConfiguration.loadConfiguration( canvasFile );
-		RadioCanvas canvas = RadioCanvasSerializer.deserialize( config );
+		RadioCanvas canvas = RadioCanvasFactory.deserialize( config );
 		
 		display.setSource( canvas );
 		

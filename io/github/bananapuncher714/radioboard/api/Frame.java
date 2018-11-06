@@ -16,6 +16,18 @@ public class Frame {
 	protected boolean center = false;
 	protected final byte[] display;
 	
+	/**
+	 * Create a new non-centered frame
+	 * 
+	 * @param x
+	 * The top left X of the given frame, can be any number
+	 * @param y
+	 * The top left Y of the given frame, can be any number
+	 * @param map
+	 * The map data, in MinecraftColor bytes
+	 * @param width
+	 * The width of this frame
+	 */
 	public Frame( int x, int y, byte[] map, int width ) {
 		this.x = x;
 		this.y = y;
@@ -23,6 +35,14 @@ public class Frame {
 		this.width = width;
 	}
 	
+	/**
+	 * Creates a new centered frame
+	 * 
+	 * @param map
+	 * The map data, in MinecraftColor bytes
+	 * @param width
+	 * The width of this frame
+	 */
 	public Frame( byte[] map, int width ) {
 		this( 0, 0, map, width );
 		center = true;
@@ -38,10 +58,21 @@ public class Frame {
 		return display;
 	}
 	
+	/**
+	 * Whether or not this frame should be centered
+	 * @return
+	 */
 	public boolean center() {
 		return center;
 	}
 	
+	/**
+	 * Set the centered option
+	 * 
+	 * @param center
+	 * @return
+	 * The frame itself
+	 */
 	public Frame setCenter( boolean center ) {
 		this.center = center;
 		return this;

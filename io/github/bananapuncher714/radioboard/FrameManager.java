@@ -19,7 +19,15 @@ public enum FrameManager {
 	
 	protected Map< String, BoardFrame > boards = new HashMap< String, BoardFrame >();
 	protected Map< String, MapDisplay > displays = new HashMap< String, MapDisplay >();
-		
+	
+	/**
+	 * Register a new board with a given id, and remove previous ones if they exist
+	 * 
+	 * @param id
+	 * The string id of the board provided
+	 * @param frame
+	 * The new BoardFrame to register
+	 */
 	public void registerBoard( String id, BoardFrame frame ) {
 		if ( boards.containsKey( id ) ) {
 			boards.remove( id ).terminate();

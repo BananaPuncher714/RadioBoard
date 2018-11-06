@@ -50,7 +50,7 @@ public class RBoard extends MapDisplay {
 		Frame frame = source.getSource();
 		if ( frame == null ) {
 			cacheLock.lock();
-			handler.見せる( observerCache, startId, mapWidth, mapHeight, display, mapWidth << 7, 0, 0 );
+			handler.display( observerCache, startId, mapWidth, mapHeight, display, mapWidth << 7, 0, 0 );
 			cacheLock.unlock();
 		} else {
 			update( frame );
@@ -64,7 +64,7 @@ public class RBoard extends MapDisplay {
 			cache[ index ] = observers[ index ].getUUID();
 		}
 		
-		handler.見せる( cache, startId, mapWidth, mapHeight, display, mapWidth << 7, 0, 0 );
+		handler.display( cache, startId, mapWidth, mapHeight, display, mapWidth << 7, 0, 0 );
 	}
 	
 	@Override
@@ -72,9 +72,9 @@ public class RBoard extends MapDisplay {
 		saveToDisplay( frame );
 		cacheLock.lock();
 		if ( frame.center() ) {
-			handler.見せる( observerCache, startId, mapWidth, mapHeight, frame.getDisplay(), frame.width );
+			handler.display( observerCache, startId, mapWidth, mapHeight, frame.getDisplay(), frame.width );
 		} else {
-			handler.見せる( observerCache, startId, mapWidth, mapHeight, frame.getDisplay(), frame.width, frame.x, frame.y );
+			handler.display( observerCache, startId, mapWidth, mapHeight, frame.getDisplay(), frame.width, frame.x, frame.y );
 		}
 		cacheLock.unlock();
 	}
@@ -82,7 +82,7 @@ public class RBoard extends MapDisplay {
 	@Override
 	public void clear() {
 		display = new byte[ display.length ];
-		handler.見せる( observerCache, startId, mapWidth, mapHeight, display, mapWidth << 7, 0, 0 );
+		handler.display( observerCache, startId, mapWidth, mapHeight, display, mapWidth << 7, 0, 0 );
 	}
 	
 	private void saveToDisplay( Frame frame ) {

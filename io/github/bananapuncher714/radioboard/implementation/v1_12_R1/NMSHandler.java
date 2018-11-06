@@ -77,7 +77,7 @@ public class NMSHandler implements PacketHandler {
 	}
 	
 	@Override
-	public void 見せる( UUID[] viewers, int map, int width, int height, byte[] rgb, int videoWidth ) {
+	public void display( UUID[] viewers, int map, int width, int height, byte[] rgb, int videoWidth ) {
 		// Get the height of the frame
 		int vidHeight = rgb.length / videoWidth;
 		int pixH = height << 7;
@@ -85,11 +85,11 @@ public class NMSHandler implements PacketHandler {
 		int xOff = ( pixW - videoWidth ) >> 1;
 		int yOff = ( pixH - vidHeight ) >> 1;
 		// Center the picture in the middle of the screen
-		見せる( viewers, map, width, height, rgb, videoWidth, xOff, yOff );
+		display( viewers, map, width, height, rgb, videoWidth, xOff, yOff );
 	}
 
 	@Override
-	public void 見せる( UUID[] viewers, int map, int width, int height, byte[] rgb, int videoWidth, int xOff, int yOff ) {
+	public void display( UUID[] viewers, int map, int width, int height, byte[] rgb, int videoWidth, int xOff, int yOff ) {
 		int vidHeight = rgb.length / videoWidth;
 		int pixW = width << 7;
 		int negXOff = xOff + videoWidth;

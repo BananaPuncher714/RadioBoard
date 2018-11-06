@@ -80,17 +80,17 @@ public class NMSHandler implements PacketHandler {
 	 * 布団好きです
 	 */
 	@Override
-	public void 見せる( UUID[] 氏名リスト, int 地図冒頭, int 地図の幅, int 地図の丈, byte[] 絵の具, int ビデオの幅 ) {
+	public void display( UUID[] 氏名リスト, int 地図冒頭, int 地図の幅, int 地図の丈, byte[] 絵の具, int ビデオの幅 ) {
 		int ビデオの丈 = 絵の具.length / ビデオの幅;
 		int ピクセルの丈 = 地図の丈 << 7;
 		int ピクセルの幅 = 地図の幅 << 7;
 		int ｘの相殺 = ( ピクセルの幅 - ビデオの幅 ) >> 1;
 		int ｙの相殺 = ( ピクセルの丈 - ビデオの丈 ) >> 1;
-		見せる( 氏名リスト, 地図冒頭, 地図の幅, 地図の丈, 絵の具, ビデオの幅, ｘの相殺, ｙの相殺 );
+		display( 氏名リスト, 地図冒頭, 地図の幅, 地図の丈, 絵の具, ビデオの幅, ｘの相殺, ｙの相殺 );
 	}
 
 	@Override
-	public void 見せる( UUID[] 氏名リスト, int 地図冒頭, int 地図の幅, int 地図の丈, byte[] 絵の具, int ビデオの幅, int ｘの相殺, int ｙの相殺 ) {
+	public void display( UUID[] 氏名リスト, int 地図冒頭, int 地図の幅, int 地図の丈, byte[] 絵の具, int ビデオの幅, int ｘの相殺, int ｙの相殺 ) {
 		// First get the full height of the video
 		int vidHeight = 絵の具.length / ビデオの幅;
 		// Get the entire width in pixels of the canvas

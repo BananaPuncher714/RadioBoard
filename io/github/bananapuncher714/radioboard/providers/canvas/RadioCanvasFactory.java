@@ -11,7 +11,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import io.github.bananapuncher714.radioboard.RadioBoard;
 
-public class RadioCanvasSerializer {
+public class RadioCanvasFactory {
 	public static RadioCanvas deserialize( ConfigurationSection section ) {
 		int width = section.getInt( "width" );
 		int height = section.getInt( "height" );
@@ -100,9 +100,5 @@ public class RadioCanvasSerializer {
 			}
 		}
 		return canvas;
-	}
-	
-	public void serialize( RadioCanvas canvas, ConfigurationSection section ) {
-		// TODO Finish this!!!
 	}
 }
