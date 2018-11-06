@@ -1,7 +1,6 @@
 package io.github.bananapuncher714.radioboard.providers.canvas;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.util.noise.NoiseGenerator;
 import org.bukkit.util.noise.SimplexNoiseGenerator;
 

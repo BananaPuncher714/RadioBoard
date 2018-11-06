@@ -32,10 +32,7 @@ import io.github.bananapuncher714.radioboard.providers.GifPlayer;
 import io.github.bananapuncher714.radioboard.providers.ImageProvider;
 import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvas;
 import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvasFactory;
-import io.github.bananapuncher714.radioboard.providers.canvas.RadioIconButton;
-import io.github.bananapuncher714.radioboard.providers.canvas.RadioIconSwitch;
 import io.github.bananapuncher714.radioboard.util.BukkitUtil;
-import io.github.bananapuncher714.radioboard.util.JetpImageUtil;
 
 public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter {
 	RadioBoard plugin;
@@ -143,7 +140,7 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 		Validate.isTrue( sender instanceof Player, ChatColor.RED + "You must be a player to run this command!" );
 		Player player = ( Player ) sender;
 		Validate.isTrue( args.length == 5, ChatColor.RED + "Incorrect usage! '/radioboard test <name> <id> <file> <x:y>'" );
-		File canvasFile = new File( RadioBoard.getInstance().getDataFolder() + "/providers/" + args[ 3 ] );
+		File canvasFile = RadioBoard.getCanvasFile( args[ 3 ] );
 		Validate.isTrue( canvasFile.exists(), ChatColor.RED + args[ 3 ] + " does not exist!" );
 		
 		String name = args[ 1 ];

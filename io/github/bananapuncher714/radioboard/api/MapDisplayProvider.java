@@ -1,8 +1,6 @@
 package io.github.bananapuncher714.radioboard.api;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 /**
  * Interface for content that provides {@link Frame} to {@link MapDisplay}
  * 

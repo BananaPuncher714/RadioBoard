@@ -3,12 +3,10 @@ package io.github.bananapuncher714.radioboard.providers.canvas;
 import java.awt.Image;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 import io.github.bananapuncher714.radioboard.api.Frame;
@@ -112,15 +110,18 @@ public class RadioCanvas implements MapDisplayProvider {
 	 */
 	public void update( RadioIcon icon, boolean send ) {
 		if ( icons.keySet().contains( icon ) ) {
-			// First we calculate the position of the icon and the maximum width and height we can render
+			// First we calculate the position of the icon
 			int[] globalCoords = icons.get( icon );
 			
 			int bufferWidth = width;
 			int bufferHeight = buffer.length / width;
-			
+
+			// We want to get the minimum area that needs to be rendered
+			// No point in looping over lost data
 			int[] globalWidthData = JetpImageUtil.getSubsegment( 0, bufferWidth, globalCoords[ 0 ], icon.getWidth() );
 			int[] globalHeightData = JetpImageUtil.getSubsegment( 0, bufferHeight, globalCoords[ 1 ], icon.getHeight() );
 			
+			// Calculate the length of the height and width
 			int globalWidthStart = globalWidthData[ 0 ];
 			int globalWidthEnd = globalWidthData[ 1 ];
 			int globalWidthLength = globalWidthEnd - globalWidthStart;
@@ -129,7 +130,7 @@ public class RadioCanvas implements MapDisplayProvider {
 			int globalHeightEnd = globalHeightData[ 1 ];
 			int globalHeightLength = globalHeightEnd - globalHeightStart;
 
-			// Clear the buffer and redraw from the canvas
+			// Clear the buffer and redraw our small rectangle from the canvas
 			for ( int y = globalHeightStart; y < globalHeightEnd; y++ ) {
 				int canvasIndexY = y * width;
 				for ( int x = globalWidthStart; x < globalWidthEnd; x++ ) {
@@ -138,7 +139,7 @@ public class RadioCanvas implements MapDisplayProvider {
 				}
 			}
 			
-			// Draw each RadioIcon in order
+			// For each icon, including the current one, find the overlap between them and draw that
 			for ( RadioIcon nextIcon : iconOrdering ) {
 				int[] localCoords = icons.get( nextIcon );
 				int[] source = nextIcon.getDisplay();
@@ -171,7 +172,7 @@ public class RadioCanvas implements MapDisplayProvider {
 			}
 			
 			if ( send && display != null ) {
-				// Get the subimage from the buffer and send it
+				// Get the sub-image from the buffer and send it
 				int[] subImage = JetpImageUtil.getSubImage( globalCoords[ 0 ], globalCoords[ 1 ], icon.getWidth(), icon.getHeight(), buffer, width );
 				display.update( new Frame( globalCoords[ 0 ], globalCoords[ 1 ], JetpImageUtil.dither( icon.getWidth(), subImage ), icon.getWidth() ) );
 			}

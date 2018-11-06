@@ -3,12 +3,9 @@ package io.github.bananapuncher714.radioboard;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.bukkit.event.block.Action;
-
 import io.github.bananapuncher714.radioboard.api.Frame;
 import io.github.bananapuncher714.radioboard.api.MapDisplay;
 import io.github.bananapuncher714.radioboard.api.PacketHandler;
-import io.github.bananapuncher714.radioboard.util.JetpImageUtil;
 
 /**
  * A Minecraft implementation of a canvas of maps; keeps a cache of the display, and a set

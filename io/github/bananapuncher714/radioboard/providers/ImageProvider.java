@@ -4,8 +4,6 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 import io.github.bananapuncher714.radioboard.api.Frame;
@@ -13,6 +11,12 @@ import io.github.bananapuncher714.radioboard.api.MapDisplay;
 import io.github.bananapuncher714.radioboard.api.MapDisplayProvider;
 import io.github.bananapuncher714.radioboard.util.JetpImageUtil;
 
+/**
+ * Simple image provider for {@link MapDisplay}; will show an image with the given height and width
+ * Also allows simple dot drawing with left and right click.
+ * 
+ * @author BananaPuncher714
+ */
 public class ImageProvider implements MapDisplayProvider {
 	protected MapDisplay display;
 	
@@ -36,8 +40,6 @@ public class ImageProvider implements MapDisplayProvider {
 			display.update( new Frame( x - 1, y - 1, new byte[] { 17, 17, 17, 17, 17, 17, 17, 17, 17 }, 3 ) );
 		} else if ( action == DisplayInteract.LEFT_CLICK ) {
 			display.update( new Frame( x - 1, y - 1, new byte[] { -126, -126, -126, -126, -126, -126, -126, -126, -126 }, 3 ) );
-		} else {
-			display.update( new Frame( x, y, new byte[] { 0 }, 1 ) );
 		}
 	}
 

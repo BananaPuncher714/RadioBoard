@@ -1,7 +1,6 @@
 package io.github.bananapuncher714.radioboard.providers.canvas;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 

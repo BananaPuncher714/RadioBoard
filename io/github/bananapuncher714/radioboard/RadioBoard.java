@@ -1,54 +1,25 @@
 package io.github.bananapuncher714.radioboard;
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.imageio.ImageIO;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
-import io.github.bananapuncher714.radioboard.api.MapDisplay;
 import io.github.bananapuncher714.radioboard.api.PacketHandler;
 import io.github.bananapuncher714.radioboard.command.RadioBoardCommandExecutor;
-import io.github.bananapuncher714.radioboard.dependency.DependencyManager;
 import io.github.bananapuncher714.radioboard.providers.GifPlayer;
 import io.github.bananapuncher714.radioboard.tinyprotocol.TinyProtocol;
-import io.github.bananapuncher714.radioboard.util.JetpImageUtil;
 import io.github.bananapuncher714.radioboard.util.ReflectionUtil;
-import io.github.bananapuncher714.radioboard.util.VectorUtil;
 import io.netty.channel.Channel;
 
 public class RadioBoard extends JavaPlugin {
 	private static RadioBoard INSTANCE;
 	private static final String FILE_IMAGES = "/images/";
+	private static final String FILE_CANVASES = "/canvases/";
 	
 	private PacketHandler packetHandler;
 	private TinyProtocol tProtocol;
@@ -141,6 +112,10 @@ public class RadioBoard extends JavaPlugin {
 	 */
 	public static File getImageFile( String image ) {
 		return new File( INSTANCE.getDataFolder() + FILE_IMAGES + image );
+	}
+	
+	public static File getCanvasFile( String canvas ) {
+		return new File( INSTANCE.getDataFolder() + FILE_CANVASES + canvas );
 	}
 	
 	public static RadioBoard getInstance() {

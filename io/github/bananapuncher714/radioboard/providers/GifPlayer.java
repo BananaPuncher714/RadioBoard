@@ -15,6 +15,11 @@ import io.github.bananapuncher714.radioboard.util.GifDecoder;
 import io.github.bananapuncher714.radioboard.util.GifDecoder.GifImage;
 import io.github.bananapuncher714.radioboard.util.JetpImageUtil;
 
+/**
+ * Simple GIF player plays a GIF on a display.
+ * 
+ * @author BananaPuncher714
+ */
 public class GifPlayer extends Thread implements MapDisplayProvider {
 	private volatile boolean RUNNING = true;
 	
