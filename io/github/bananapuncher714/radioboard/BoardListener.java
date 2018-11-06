@@ -28,13 +28,15 @@ public class BoardListener implements Listener {
 	private class BoardCoord {
 		private final BoardFrame board;
 		private final ItemFrame frame;
+		private final Location clicked;
 		private final int map;
 		private final int x;
 		private final int y;
 		
-		private BoardCoord( BoardFrame board, ItemFrame frame, int map, int x, int y ) {
+		private BoardCoord( BoardFrame board, ItemFrame frame, Location clicked, int map, int x, int y ) {
 			this.board = board;
 			this.frame = frame;
+			this.clicked = clicked;
 			this.map = map;
 			this.x = x;
 			this.y = y;
@@ -168,7 +170,8 @@ public class BoardListener implements Listener {
 
 			// Calculate point of click
 			Location location = VectorUtil.calculateVector( point, normal, originLocation, originDirection );
-
+			Location originalLocation = location.clone();
+			
 			// Check to see if it is a clicked frame
 			ItemFrame frame = board.getItemFrameAt( location );
 			if ( frame == null ) {
@@ -201,15 +204,15 @@ public class BoardListener implements Listener {
 				x = ( int ) Math.abs( ( location.getX() - ( .5 + .5 * normal.getZ() ) ) * 128 );
 				y = 127 - ( int ) ( location.getY() * 128 );
 			}
-			return new BoardCoord( board, frame, id, x, y );
+			return new BoardCoord( board, frame, originalLocation, id, x, y );
 		}
 		return null;
 	}
 	
 	private boolean calculate( Player player, DisplayInteract action ) {
 		BoardCoord coord = getBoardCoords( player.getEyeLocation(), player.getLocation().getDirection() );
-		if ( coord == null || !player.hasLineOfSight( coord.frame ) ) {
-			return false;
+		if ( coord == null || !player.hasLineOfSight( coord.frame ) || coord.clicked.distanceSquared( player.getEyeLocation() ) > 4096 ) {
+			return coord != null;
 		}
 		for ( MapDisplay display : FrameManager.INSTANCE.getDisplays() ) {
 			if ( display.getMapId() == coord.board.getId() ) {

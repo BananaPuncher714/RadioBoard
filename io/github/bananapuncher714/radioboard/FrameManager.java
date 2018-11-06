@@ -149,6 +149,8 @@ public enum FrameManager {
 		MapDisplayProvider provider = RadioCanvasFactory.deserialize( presetSection );
 		board.setSource( provider );
 		
+		registerDisplay( board );
+		
 		return board;
 	}
 }

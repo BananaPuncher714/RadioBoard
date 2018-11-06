@@ -57,20 +57,34 @@ public class PlayerListener implements Listener {
 		}, 5 );
 	}
 	
-	private void updateMapsFor( Player player ) {
+	protected void updateMapsFor( Player player ) {
 		RadioObserver observer = new RadioObserver( player.getUniqueId() );
+		Set< String > coreBoards = RadioBoard.getInstance().getCoreBoards();
 		Set< MapDisplay > displays = new HashSet< MapDisplay >();
 		for ( BoardFrame frame : FrameManager.INSTANCE.getBoardFrames() ) {
 			if ( frame.getTopLeftCorner().getWorld() == player.getWorld() ) {
 				for ( MapDisplay display : FrameManager.INSTANCE.getDisplays() ) {
-					if ( display.getMapId() == frame.getId() && display.isObserving( observer ) ) {
-						displays.add( display );
+					if ( display.getMapId() == frame.getId() ) {
+						if ( coreBoards.contains( display.getId() ) ) {
+							display.removeObserver( observer );
+							displays.add( display );
+						} else if ( display.isObserving( observer ) ) {
+							displays.add( display );
+						}
 					}
 				}
 			}
 		}
 		for ( MapDisplay display : displays ) {
-			display.update( observer );
+			// Add the player as an observer if they have the proper permission, but only for non-custom boards
+			if ( coreBoards.contains( display.getId() ) ) {
+				if ( player.hasPermission( "radioboard.board." + display.getId() + ".view" ) ) {
+					display.addObserver( observer );
+					display.update( observer );
+				}
+			} else {
+				display.update( observer );
+			}
 		}
 	}
 }

@@ -1,7 +1,6 @@
 displays:
-  providers:
-    example_display:
-      id: 0
-      width: 6
-      height: 6
-      provider: "example-canvas.yml"
+  example_display:
+    id: 0
+    width: 6
+    height: 6
+    provider: "example-canvas.yml"

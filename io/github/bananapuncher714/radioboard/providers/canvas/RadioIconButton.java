@@ -51,18 +51,9 @@ public class RadioIconButton implements RadioIcon {
 	
 	@Override
 	public void onClick( Entity entity, DisplayInteract action, int x, int y ) {
-		if ( action == DisplayInteract.LOOK ) {
+		if ( action == DisplayInteract.LOOK || action == DisplayInteract.PROJECTILE ) {
 			return;
 		}
-		if ( action == DisplayInteract.PROJECTILE && entity instanceof Projectile ) {
-			ProjectileSource source = ( ( Projectile ) entity ).getShooter();
-			if ( source instanceof Player ) {
-				entity = ( Entity ) source;
-			} else {
-				return;
-			}
-		}
-		
 		if ( !( entity instanceof Player ) ) {
 			return;
 		}

@@ -27,6 +27,8 @@ public class RadioBoard extends JavaPlugin {
 	private PacketHandler packetHandler;
 	private TinyProtocol tProtocol;
 	
+	private PlayerListener playerListener;
+	
 	protected Set< String > configBoards = new HashSet< String >();
 	
 	@Override
@@ -76,10 +78,16 @@ public class RadioBoard extends JavaPlugin {
 		
 		loadConfig();
 		
-		Bukkit.getPluginManager().registerEvents( new PlayerListener( this ), this );
+		playerListener = new PlayerListener( this );
+		Bukkit.getPluginManager().registerEvents( playerListener, this );
 		Bukkit.getPluginManager().registerEvents( new BoardListener( this ), this );
 		
+		for ( Player player : Bukkit.getOnlinePlayers() ) {
+			playerListener.updateMapsFor( player );
+		}
+		
 		getCommand( "video" ).setExecutor( new RadioBoardCommandExecutor( this ) );
+		
 	}
 
 	@Override
@@ -89,6 +97,19 @@ public class RadioBoard extends JavaPlugin {
 	}
 	
 	private void loadConfig() {
+		File boardCacheFile = new File( getDataFolder() + "/boards.yml" );
+		if ( boardCacheFile.exists() ) {
+			FileConfiguration boardCache = YamlConfiguration.loadConfiguration( boardCacheFile );
+			if ( boardCache.contains( "displays" ) ) {
+				for ( String displayName : boardCache.getConfigurationSection( "displays" ).getKeys( false ) ) {
+					if ( FrameManager.INSTANCE.loadDisplay( displayName, boardCache.getConfigurationSection( "displays." + displayName ) ) != null ) {
+						getLogger().info( "Registered display '" + displayName + "'" );
+						configBoards.add( displayName );
+					}
+				}
+			}
+		}
+		
 		File frameCacheFile = new File( getDataFolder() + "/frame-cache.yml" );
 		if ( frameCacheFile.exists() ) {
 			FileConfiguration frameCache = YamlConfiguration.loadConfiguration( frameCacheFile );
@@ -117,6 +138,10 @@ public class RadioBoard extends JavaPlugin {
 		}
 	}
 	
+	public Set< String > getCoreBoards() {
+		return configBoards;
+	}
+	
 	public PacketHandler getPacketHandler() {
 		return packetHandler;
 	}
@@ -137,6 +162,14 @@ public class RadioBoard extends JavaPlugin {
 		return new File( INSTANCE.getDataFolder() + FILE_IMAGES + image );
 	}
 	
+	/**
+	 * Get a file located in the canvas folder for this plugin
+	 * 
+	 * @param canvas
+	 * The name of a file
+	 * @return
+	 * A new file in the canvas folder
+	 */
 	public static File getCanvasFile( String canvas ) {
 		return new File( INSTANCE.getDataFolder() + FILE_CANVASES + canvas );
 	}

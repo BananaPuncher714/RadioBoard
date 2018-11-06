@@ -14,7 +14,7 @@ import io.github.bananapuncher714.radioboard.api.PacketHandler;
  * @author BananaPuncher714
  */
 public class RBoard extends MapDisplay {
-	protected UUID[] observerCache;
+	protected UUID[] observerCache = new UUID[ 0 ];
 	protected ReentrantLock cacheLock = new ReentrantLock();
 	protected byte[] display;
 	
@@ -112,14 +112,20 @@ public class RBoard extends MapDisplay {
 
 	@Override
 	public void addObserver( RadioObserver... obs ) {
+		int previousSize = observers.size();
 		super.addObserver( obs );
-		rebuildObserverCache();
+		if ( previousSize != observers.size() ) {
+			rebuildObserverCache();
+		}
 	}
 
 	@Override
 	public void removeObserver( RadioObserver... obs ) {
+		int previousSize = observers.size();
 		super.removeObserver( obs );
-		rebuildObserverCache();
+		if ( previousSize != observers.size() ) {
+			rebuildObserverCache();
+		}
 	}
 
 	// In case the size of observers is different or has changed
