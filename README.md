@@ -1,6 +1,6 @@
 # RadioBoard
 ### What is this?
-RadioBoard is a Bukkit plugin that uses map items to draw pictures and play gifs. It is comprised of 2 parts, virtual canvases, and board frames
+RadioBoard is a Bukkit plugin that uses map items to draw pictures and play GIFs. It is comprised of 2 parts, virtual canvases, and board frames
 
 Virtual canvases are just a blank slate upon which images or shapes can be draw on, and displayed to the player. They can be spread across several board frames, or none at all.
 
@@ -8,6 +8,9 @@ Board frames are in-game structures that are made of a wall with an array of ite
 
 ### Limitations:
 Unfortunately, due to Minecraft's packet limit threshold, it is not possible to send an unlimited amount of map packets at the player without the client timing out. Gifs and animations should be limited to roughly 500 full map packets per second. This does *not* mean that the server cannot send out more than 500 packets, simply that any individual player should not receive more than 500 packets per second.
+
+### Usage:
+RadioBoard comes with a lot of great core features, such as full dynamic interactive boards that support GIFs, images, buttons, switches, and cool special effects.
 
 ### Commands:
 - video <board|show> ...

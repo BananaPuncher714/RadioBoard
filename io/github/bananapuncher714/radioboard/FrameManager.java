@@ -1,5 +1,6 @@
 package io.github.bananapuncher714.radioboard;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,8 +11,12 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import io.github.bananapuncher714.radioboard.api.MapDisplay;
+import io.github.bananapuncher714.radioboard.api.MapDisplayProvider;
+import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvasFactory;
 import io.github.bananapuncher714.radioboard.util.BukkitUtil;
 
 public enum FrameManager {
@@ -125,5 +130,25 @@ public enum FrameManager {
 			
 			registerBoard( key, frame );
 		}
+	}
+	
+	protected MapDisplay loadDisplay( String name, ConfigurationSection section ) {
+		int id = section.getInt( "id" );
+		int width = section.getInt( "width" );
+		int height = section.getInt( "height" );
+		
+		String presetFileName = section.getString( "provider" );
+		File preset = RadioBoard.getCanvasFile( presetFileName );
+		
+		if ( !preset.exists() ) {
+			return null;
+		}
+		
+		RBoard board = new RBoard( name, id, width, height );
+		FileConfiguration presetSection = YamlConfiguration.loadConfiguration( preset );
+		MapDisplayProvider provider = RadioCanvasFactory.deserialize( presetSection );
+		board.setSource( provider );
+		
+		return board;
 	}
 }

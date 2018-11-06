@@ -1,0 +1,38 @@
+width: 768
+height: 768
+background-image: "example/nyan_cat_background.jpg"
+elements:
+  - type: "SWITCH"
+    x: 50
+    y: 120
+    width: 400
+    height: 100
+    data:
+      on-image: "example/logo.png"
+      on-command: "/tellraw %player_name% [\"\",{\"text\":\"Thanks for using \",\"color\":\"gold\"},{\"text\":\"RadioBoard\",\"color\":\"light_purple\"},{\"text\":\"!\",\"color\":\"gold\"}]"
+      off-image: "example/logo.png"
+      off-command: "/tellraw %player_name% {\"text\":\"Be sure to check out the documentation!\",\"color\":\"gold\"}"
+  - type: "GIF"
+    x: 480
+    y: 80
+    width: 250
+    height: 188
+    data:
+      gif: "example/kurisu.gif"
+  - type: "IMAGE"
+    x: 360
+    y: 470
+    width: 320
+    height: 260
+    data:
+      image: "example/shinoa-smirk.png"
+  - type: "BUTTON"
+    x: 150
+    y: 550
+    width: 160
+    height: 80
+    data:
+      clicked-image: "example/on-switch.png"
+      unclicked-image: "example/off-switch.png"
+      command: "give %player_name% stick"
+      button-delay: 500

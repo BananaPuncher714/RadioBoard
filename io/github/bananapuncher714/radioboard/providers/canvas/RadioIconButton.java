@@ -1,6 +1,7 @@
 package io.github.bananapuncher714.radioboard.providers.canvas;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -71,7 +72,14 @@ public class RadioIconButton implements RadioIcon {
 		Player player = ( Player ) entity;
 		pressed = true;
 		provider.update( this );
-		Bukkit.dispatchCommand( player, DependencyManager.parse( player, command ) );
+		
+		String cmd = command.replace( "%player_name%", player.getName() );
+		CommandSender sender = Bukkit.getConsoleSender();
+		if ( cmd.startsWith( "/" ) ) {
+			cmd = cmd.substring( 1 );
+			sender = player;
+		}
+		Bukkit.dispatchCommand( sender, DependencyManager.parse( player, cmd ) );
 		
 		Bukkit.getScheduler().runTaskAsynchronously( RadioBoard.getInstance(), new Runnable() {
 			@Override

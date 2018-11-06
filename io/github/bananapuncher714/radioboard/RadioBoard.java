@@ -2,6 +2,8 @@ package io.github.bananapuncher714.radioboard;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,22 +15,19 @@ import io.github.bananapuncher714.radioboard.api.PacketHandler;
 import io.github.bananapuncher714.radioboard.command.RadioBoardCommandExecutor;
 import io.github.bananapuncher714.radioboard.providers.GifPlayer;
 import io.github.bananapuncher714.radioboard.tinyprotocol.TinyProtocol;
+import io.github.bananapuncher714.radioboard.util.FileUtil;
 import io.github.bananapuncher714.radioboard.util.ReflectionUtil;
 import io.netty.channel.Channel;
 
 public class RadioBoard extends JavaPlugin {
 	private static RadioBoard INSTANCE;
 	private static final String FILE_IMAGES = "/images/";
-	private static final String FILE_CANVASES = "/canvases/";
+	private static final String FILE_CANVASES = "/providers/";
 	
 	private PacketHandler packetHandler;
 	private TinyProtocol tProtocol;
 	
-	protected GifPlayer player;
-	protected int currentId, mapWidth, mapHeight, width;
-	protected byte[] data;
-	
-	protected BoardFrame fBoard;
+	protected Set< String > configBoards = new HashSet< String >();
 	
 	@Override
 	public void onEnable() {
@@ -49,6 +48,30 @@ public class RadioBoard extends JavaPlugin {
 		
 		for ( Player player : Bukkit.getOnlinePlayers() ) {
 			packetHandler.registerPlayer( player );
+		}
+		
+		saveDefaultConfig();
+		saveResource( "boards.yml", false );
+		
+		getImageFile( "" ).mkdirs();
+		getCanvasFile( "" ).mkdirs();
+		
+		File readme = new File( getDataFolder() + "/" + "README.md" );
+		if ( !readme.exists() ) {
+			// Save important files
+			FileUtil.saveToFile( getResource( "README.md" ), readme, true );
+			FileUtil.saveToFile( getResource( "LICENSE" ), new File( getDataFolder() + "/" + "LICENSE" ), true );
+			
+			// Save the example canvas
+			FileUtil.saveToFile( getResource( "data/providers/example-canvas.yml" ), new File( getDataFolder() + FILE_CANVASES + "example-canvas.yml" ), true );
+			
+			// Save all pictures necessary
+			FileUtil.saveToFile( getResource( "data/images/kurisu.gif" ), new File( getDataFolder() + FILE_IMAGES + "example/" + "kurisu.gif" ), true );
+			FileUtil.saveToFile( getResource( "data/images/logo.png" ), new File( getDataFolder() + FILE_IMAGES + "example/" + "logo.png" ), true );
+			FileUtil.saveToFile( getResource( "data/images/nyan_cat_background.jpg" ), new File( getDataFolder() + FILE_IMAGES + "example/" + "nyan_cat_background.jpg" ), true );
+			FileUtil.saveToFile( getResource( "data/images/off-switch.png" ), new File( getDataFolder() + FILE_IMAGES + "example/" + "off-switch.png" ), true );
+			FileUtil.saveToFile( getResource( "data/images/on-switch.png" ), new File( getDataFolder() + FILE_IMAGES + "example/" + "on-switch.png" ), true );
+			FileUtil.saveToFile( getResource( "data/images/shinoa-smirk.png" ), new File( getDataFolder() + FILE_IMAGES + "example/" + "shinoa-smirk.png" ), true );
 		}
 		
 		loadConfig();

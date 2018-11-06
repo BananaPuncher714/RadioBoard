@@ -47,6 +47,10 @@ public class RBoard extends MapDisplay {
 		Frame frame = source.getSource();
 		if ( frame == null ) {
 			cacheLock.lock();
+			if ( observerCache.length == 0 ) {
+				cacheLock.unlock();
+				return;
+			}
 			handler.display( observerCache, startId, mapWidth, mapHeight, display, mapWidth << 7, 0, 0 );
 			cacheLock.unlock();
 		} else {
@@ -68,6 +72,10 @@ public class RBoard extends MapDisplay {
 	public void update( Frame frame ) {
 		saveToDisplay( frame );
 		cacheLock.lock();
+		if ( observerCache.length == 0 ) {
+			cacheLock.unlock();
+			return;
+		}
 		if ( frame.center() ) {
 			handler.display( observerCache, startId, mapWidth, mapHeight, frame.getDisplay(), frame.width );
 		} else {
