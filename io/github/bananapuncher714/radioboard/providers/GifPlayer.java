@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
@@ -73,7 +74,7 @@ public class GifPlayer extends Thread implements MapDisplayProvider {
 	}
 
 	@Override
-	public void interactAt( Player player, DisplayInteract action, int x, int y ) {
+	public void interactAt( Entity entity, DisplayInteract action, int x, int y ) {
 	}
 
 	@Override

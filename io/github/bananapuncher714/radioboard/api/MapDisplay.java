@@ -3,6 +3,7 @@ package io.github.bananapuncher714.radioboard.api;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 
@@ -80,12 +81,12 @@ public abstract class MapDisplay {
 		observers.clear();
 	}
 	
-	public void onClick( Player player, DisplayInteract action, int id, int x, int y ) {
+	public void onClick( Entity entity, DisplayInteract action, int id, int x, int y ) {
 		id -= startId;
 		int height = id / mapWidth;
 		int width = id % mapWidth;
 		// Call the interact at the X and Y starting from the top left corner
-		source.interactAt( player, action, ( width << 7 ) + x, ( height << 7 ) + y );
+		source.interactAt( entity, action, ( width << 7 ) + x, ( height << 7 ) + y );
 	}
 	
 	public abstract void clear();

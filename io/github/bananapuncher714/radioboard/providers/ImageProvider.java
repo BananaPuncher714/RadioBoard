@@ -3,6 +3,7 @@ package io.github.bananapuncher714.radioboard.providers;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 
@@ -29,7 +30,7 @@ public class ImageProvider implements MapDisplayProvider {
 	}
 
 	@Override
-	public void interactAt( Player player, DisplayInteract action, int x, int y ) {
+	public void interactAt( Entity entity, DisplayInteract action, int x, int y ) {
 		// Demonstration of interaction
 		if ( action == DisplayInteract.RIGHT_CLICK ) {
 			display.update( new Frame( x - 1, y - 1, new byte[] { 17, 17, 17, 17, 17, 17, 17, 17, 17 }, 3 ) );

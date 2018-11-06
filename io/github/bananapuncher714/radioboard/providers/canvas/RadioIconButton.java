@@ -1,7 +1,10 @@
 package io.github.bananapuncher714.radioboard.providers.canvas;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.projectiles.ProjectileSource;
 
 import io.github.bananapuncher714.radioboard.RadioBoard;
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
@@ -46,13 +49,26 @@ public class RadioIconButton implements RadioIcon {
 	}
 	
 	@Override
-	public void onClick( Player player, DisplayInteract action, int x, int y ) {
+	public void onClick( Entity entity, DisplayInteract action, int x, int y ) {
 		if ( action == DisplayInteract.LOOK ) {
+			return;
+		}
+		if ( action == DisplayInteract.PROJECTILE && entity instanceof Projectile ) {
+			ProjectileSource source = ( ( Projectile ) entity ).getShooter();
+			if ( source instanceof Player ) {
+				entity = ( Entity ) source;
+			} else {
+				return;
+			}
+		}
+		
+		if ( !( entity instanceof Player ) ) {
 			return;
 		}
 		if ( pressed ) {
 			return;
 		}
+		Player player = ( Player ) entity;
 		pressed = true;
 		provider.update( this );
 		Bukkit.dispatchCommand( player, DependencyManager.parse( player, command ) );

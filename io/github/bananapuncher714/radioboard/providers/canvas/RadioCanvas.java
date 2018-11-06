@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
@@ -63,7 +64,7 @@ public class RadioCanvas implements MapDisplayProvider {
 	}
 	
 	@Override
-	public void interactAt( Player player, DisplayInteract action, int x, int y ) {
+	public void interactAt( Entity entity, DisplayInteract action, int x, int y ) {
 		for ( RadioIcon icon : iconOrdering ) {
 			int[] coords = icons.get( icon );
 			if ( x < coords[ 0 ] || x >= coords[ 0 ] + icon.getWidth() ) {
@@ -73,7 +74,7 @@ public class RadioCanvas implements MapDisplayProvider {
 				continue;
 			}
 			
-			icon.onClick( player, action, x - coords[ 0 ], y - coords[ 1 ] );
+			icon.onClick( entity, action, x - coords[ 0 ], y - coords[ 1 ] );
 		}
 	}
 	

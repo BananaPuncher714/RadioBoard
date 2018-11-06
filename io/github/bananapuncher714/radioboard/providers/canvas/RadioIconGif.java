@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.io.File;
 import java.io.FileInputStream;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
@@ -83,7 +84,7 @@ public class RadioIconGif extends Thread implements RadioIcon {
 	}
 
 	@Override
-	public void onClick(Player player, DisplayInteract action, int x, int y) {
+	public void onClick( Entity entity, DisplayInteract action, int x, int y) {
 	}
 
 	@Override

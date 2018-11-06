@@ -8,5 +8,6 @@ package io.github.bananapuncher714.radioboard.api;
 public enum DisplayInteract {
 	LEFT_CLICK,
 	RIGHT_CLICK,
-	LOOK;
+	LOOK,
+	PROJECTILE;
 }

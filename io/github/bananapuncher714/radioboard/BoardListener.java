@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -24,6 +25,22 @@ import io.github.bananapuncher714.radioboard.api.MapDisplay;
 import io.github.bananapuncher714.radioboard.util.VectorUtil;
 
 public class BoardListener implements Listener {
+	private class BoardCoord {
+		private final BoardFrame board;
+		private final ItemFrame frame;
+		private final int map;
+		private final int x;
+		private final int y;
+		
+		private BoardCoord( BoardFrame board, ItemFrame frame, int map, int x, int y ) {
+			this.board = board;
+			this.frame = frame;
+			this.map = map;
+			this.x = x;
+			this.y = y;
+		}
+	}
+	
 	protected BoardListener( RadioBoard plugin ) {
 		Bukkit.getScheduler().runTaskTimer( plugin, this::run, 0, 4 );
 	}
@@ -105,6 +122,20 @@ public class BoardListener implements Listener {
 	}
 	
 	@EventHandler
+	private void onProjectileHitEvent( ProjectileHitEvent event ) {
+		Entity entity = event.getEntity();
+		BoardCoord coords = getBoardCoords( entity.getLocation(), entity.getVelocity().normalize() );
+		if ( coords == null ) {
+			return;
+		}
+		for ( MapDisplay display : FrameManager.INSTANCE.getDisplays() ) {
+			if ( display.getMapId() == coords.board.getId() ) {
+				display.onClick( entity, DisplayInteract.PROJECTILE, coords.map, coords.x, coords.y );
+			}
+		}
+	}
+	
+	@EventHandler
 	private void onMapInitializeEvent( MapInitializeEvent event ) {
 		short id = event.getMap().getId();
 		if ( RadioBoard.getInstance().getPacketHandler().isMapRegistered( id ) ) {
@@ -112,12 +143,12 @@ public class BoardListener implements Listener {
 		}
 	}
 	
-	private boolean calculate( Player player, DisplayInteract action ) {
+	private BoardCoord getBoardCoords( Location origin, Vector direction ) {
 		for ( BoardFrame board : FrameManager.INSTANCE.getBoardFrames() ) {
-			Location playerLoc = player.getEyeLocation();
-			Vector direction = playerLoc.getDirection();
+			Location originLocation = origin.clone();
+			Vector originDirection = direction.clone();
 			
-			if ( player.getWorld() != board.getTopLeftCorner().getWorld() ) {
+			if ( originLocation.getWorld() != board.getTopLeftCorner().getWorld() ) {
 				continue;
 			}
 			
@@ -125,7 +156,7 @@ public class BoardListener implements Listener {
 			// Get the normal vector to the board
 			Vector normal = new Vector( face.getModX(), face.getModY(), face.getModZ() );
 			// Check to see if the player is actually looking at the board
-			if ( normal.dot( direction ) < 0 ) {
+			if ( normal.dot( originDirection ) < 0 ) {
 //				player.sendMessage( "You are looking at the back of the board!" );
 				continue;
 			}
@@ -136,7 +167,7 @@ public class BoardListener implements Listener {
 			Location point = board.getTopLeftCorner().clone().add( positive );
 
 			// Calculate point of click
-			Location location = VectorUtil.calculateVector( point, normal, playerLoc, direction );
+			Location location = VectorUtil.calculateVector( point, normal, originLocation, originDirection );
 
 			// Check to see if it is a clicked frame
 			ItemFrame frame = board.getItemFrameAt( location );
@@ -145,10 +176,10 @@ public class BoardListener implements Listener {
 				continue;
 			}
 			// Make sure the player can actually see the frame
-			if ( !player.hasLineOfSight( frame ) ){
+//			if ( !player.hasLineOfSight( frame ) ){
 //				player.sendMessage( "You cannot see the item frame!" );
-				continue;
-			}
+//				continue;
+//			}
 			int id = board.getFrames().indexOf( frame.getUniqueId() );
 			if ( id < 0 ) {
 //				player.sendMessage( "You clicked on an invalid map!" );
@@ -170,20 +201,23 @@ public class BoardListener implements Listener {
 				x = ( int ) Math.abs( ( location.getX() - ( .5 + .5 * normal.getZ() ) ) * 128 );
 				y = 127 - ( int ) ( location.getY() * 128 );
 			}
-//			player.sendMessage( x + ":" + y );
-			
-			// Here we have all we need, the map id, x, and y
-			// Loop through all the map displays and check if any of the displays have a common first id
-			for ( MapDisplay display : FrameManager.INSTANCE.getDisplays() ) {
-				if ( display.getMapId() == board.getId() ) {
-					if ( display.isObserving( new RadioObserver( player.getUniqueId() ) ) ) {
-						display.onClick( player, action, id, x, y );
-						return true;
-					}
+			return new BoardCoord( board, frame, id, x, y );
+		}
+		return null;
+	}
+	
+	private boolean calculate( Player player, DisplayInteract action ) {
+		BoardCoord coord = getBoardCoords( player.getEyeLocation(), player.getLocation().getDirection() );
+		if ( coord == null || !player.hasLineOfSight( coord.frame ) ) {
+			return false;
+		}
+		for ( MapDisplay display : FrameManager.INSTANCE.getDisplays() ) {
+			if ( display.getMapId() == coord.board.getId() ) {
+				if ( display.isObserving( new RadioObserver( player.getUniqueId() ) ) ) {
+					display.onClick( player, action, coord.map, coord.x, coord.y );
+					return true;
 				}
 			}
-			return true;
-//			packetHandler.見せる( null, currentId, mapWidth, mapHeight, new byte[] { 17, 17, 17, 17, 17, 17, 17, 17, 17 }, 3, id % mapWidth * 128 + x - 1, id / mapWidth * 128 + y - 1 );
 		}
 		return false;
 	}
