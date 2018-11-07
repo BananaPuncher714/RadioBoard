@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -48,7 +49,7 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 				help( sender );
 			} else if ( args.length > 0 ) {
 				if ( args[ 0 ].equalsIgnoreCase( "board" ) ) {
-					board( sender, args );
+					board( sender, pop( args ) );
 				} else if ( args[ 0 ].equalsIgnoreCase( "show" ) ) {
 					show( sender, args );
 				} else if ( args[ 0 ].equalsIgnoreCase( "test" ) ) {
@@ -67,21 +68,38 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 	
 	private void help( CommandSender sender ) {
 		Validate.isTrue( sender.hasPermission( "radioboard.admin" ), ChatColor.RED + "You do not have permission to run this command!" );
-		sender.sendMessage( ChatColor.RED + "Incorrect usage! '/radioboard <board|show> ..." );
+		sender.sendMessage( ChatColor.RED + "Incorrect usage! '/radioboard <board|display|list> ..." );
 	}
 	
 	private void board( CommandSender sender, String[] args ) {
 		Validate.isTrue( sender.hasPermission( "radioboard.admin" ), ChatColor.RED + "You do not have permission to run this command!" );
-		Validate.isTrue( sender instanceof Player, ChatColor.RED + "You must be a player to run this command!" );
-		Validate.isTrue( args.length == 3, ChatColor.RED + "Incorrect usage! '/radioboard board <name> <map-id>'" );
-		int id;
-		try {
-			id = Integer.parseInt( args[ 2 ] );
-		} catch ( NumberFormatException exception ) {
-			throw new IllegalArgumentException( ChatColor.RED + "'" + args[ 2 ] + "' must be an integer!" );
+		Validate.isTrue( args.length > 0, ChatColor.RED + "Incorrect usage! '/radioboard board <create|remove> ...'" );
+		
+		String option = args[ 0 ];
+		args = pop( args );
+		if ( option.equalsIgnoreCase( "create" ) ) {
+			boardCreate( sender, args );
+		} else if ( option.equalsIgnoreCase( "remove" ) ) {
+			boardRemove( sender, args );
+		} else {
+			throw new IllegalArgumentException( ChatColor.RED + "Incorrect usage! '/radioboard board <create|remove> ...'" );
 		}
+	}
+	
+	private void boardCreate( CommandSender sender, String[] args ) {
+		Validate.isTrue( sender.hasPermission( "radioboard.admin" ), ChatColor.RED + "You do not have permission to run this command!" );
+		Validate.isTrue( sender instanceof Player, ChatColor.RED + "You must be a player to run this command!" );
+		Validate.isTrue( args.length == 2, ChatColor.RED + "Incorrect usage! '/radioboard board create <name> <map-id>'" );
+		int mapId;
+		try {
+			mapId = Integer.parseInt( args[ 1 ] );
+		} catch ( NumberFormatException exception ) {
+			throw new IllegalArgumentException( ChatColor.RED + "'" + args[ 1 ] + "' is not a valid map id!" );
+		}
+		
+		String name = args[ 0 ];
+		
 		Player player = ( Player ) sender;
-		String name = args[ 1 ];
 		
 		Location lookingAt = player.getLastTwoTargetBlocks( ( Set< Material > ) null, 100 ).get( 0 ).getLocation();
 		ItemFrame frame = BukkitUtil.getItemFrameAt( lookingAt );
@@ -89,10 +107,60 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 		
 		BoardFrame board = FrameManager.INSTANCE.getFrameAt( lookingAt );
 		
-		board = new BoardFrame( frame, id );
+		board = new BoardFrame( frame, mapId );
 		
 		FrameManager.INSTANCE.registerBoard( name, board );
-		sender.sendMessage( "Successfully set up a new board with map id '" + id + "'" );
+		
+		for ( Player worldPlayer : player.getWorld().getPlayers() ) {
+			RadioBoard.getInstance().updateDisplaysFor( worldPlayer );
+		}
+		sender.sendMessage( ChatColor.GREEN + "Successfully set up a new board(" + name + ") with map id '" + mapId + "'" );
+	}
+	
+	private void boardRemove( CommandSender sender, String[] args ) {
+		Validate.isTrue( sender.hasPermission( "radioboard.admin" ), ChatColor.RED + "You do not have permission to run this command!" );
+		Validate.isTrue( args.length == 1, ChatColor.RED + "Incorrect usage! '/radioboard board remove <name>'" );
+		
+		String name = args[ 0 ];
+		BoardFrame frame = FrameManager.INSTANCE.getFrame( name );
+		
+		Validate.isTrue( frame != null, ChatColor.RED + "'" + name + "' does not exist!" );
+		
+		FrameManager.INSTANCE.removeFrame( name );
+		
+		for ( Player worldPlayer : frame.getTopLeftCorner().getWorld().getPlayers() ) {
+			RadioBoard.getInstance().updateDisplaysFor( worldPlayer );
+		}
+		
+		sender.sendMessage( ChatColor.GREEN + "Successfully removed a board(" + name + ")!" );
+	}
+	
+	private void displayCreate( CommandSender sender, String[] args ) {
+		Validate.isTrue( sender.hasPermission( "radioboard.admin" ), ChatColor.RED + "You do not have permission to run this command!" );
+		Validate.isTrue( args.length == 2, ChatColor.RED + "Incorrect usage! '/radioboard board create <name> <map-id>'" );
+		File file = RadioBoard.getCanvasFile( args[ 2 ] );
+		Validate.isTrue( file.exists(), ChatColor.RED + "'" + args[ 2 ] + "' does not exist!" );
+		int mapId;
+		try {
+			mapId = Integer.parseInt( args[ 1 ] );
+		} catch ( NumberFormatException exception ) {
+			throw new IllegalArgumentException( ChatColor.RED + "'" + args[ 1 ] + "' is not a valid map id!" );
+		}
+		
+		int width;
+		try {
+			width = Integer.parseInt( args[ 3 ] );
+		} catch ( NumberFormatException exception ) {
+			throw new IllegalArgumentException( ChatColor.RED + "'" + args[ 3 ] + "' is not a valid width!" );
+		}
+		
+		int height;
+		try {
+			height = Integer.parseInt( args[ 4 ] );
+		} catch ( NumberFormatException exception ) {
+			throw new IllegalArgumentException( ChatColor.RED + "'" + args[ 4 ] + "' is not a valid height!" );
+		}
+		
 		
 	}
 	
@@ -155,8 +223,18 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 		
 		display.setSource( canvas );
 		
-		display.addObserver( new RadioObserver( player.getUniqueId() ) );
-
+		for ( Player worldPlayer : Bukkit.getOnlinePlayers() ) {
+			RadioBoard.getInstance().updateDisplaysFor( worldPlayer );
+		}
+		
 		player.sendMessage( "Created map display!" );
+	}
+	
+	private String[] pop( String[] array ) {
+		String[] array2 = new String[ array.length - 1 ];
+		for ( int i = 1; i < array.length; i++ ) {
+			array2[ i - 1 ] = array[ i ];
+		}
+		return array2;
 	}
 }

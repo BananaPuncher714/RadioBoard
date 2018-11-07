@@ -61,14 +61,16 @@ public class PlayerListener implements Listener {
 		RadioObserver observer = new RadioObserver( player.getUniqueId() );
 		Set< String > coreBoards = RadioBoard.getInstance().getCoreBoards();
 		Set< MapDisplay > displays = new HashSet< MapDisplay >();
+		for ( MapDisplay display : FrameManager.INSTANCE.getDisplays() ) {
+			if ( coreBoards.contains( display.getId() ) ) {
+				display.removeObserver( observer );
+			}
+		}
 		for ( BoardFrame frame : FrameManager.INSTANCE.getBoardFrames() ) {
 			if ( frame.getTopLeftCorner().getWorld() == player.getWorld() ) {
 				for ( MapDisplay display : FrameManager.INSTANCE.getDisplays() ) {
 					if ( display.getMapId() == frame.getId() ) {
-						if ( coreBoards.contains( display.getId() ) ) {
-							display.removeObserver( observer );
-							displays.add( display );
-						} else if ( display.isObserving( observer ) ) {
+						if ( coreBoards.contains( display.getId() ) || display.isObserving( observer ) ) {
 							displays.add( display );
 						}
 					}

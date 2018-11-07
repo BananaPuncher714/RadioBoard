@@ -202,7 +202,7 @@ public class RadioBoard extends JavaPlugin {
 	public void updateDisplaysFor( Player player ) {
 		playerListener.updateMapsFor( player );
 	}
-	
+
 	public PacketHandler getPacketHandler() {
 		return packetHandler;
 	}
