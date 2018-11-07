@@ -1,6 +1,5 @@
 package io.github.bananapuncher714.radioboard;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,12 +10,7 @@ import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import io.github.bananapuncher714.radioboard.api.MapDisplay;
-import io.github.bananapuncher714.radioboard.api.MapDisplayProvider;
-import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvasFactory;
 import io.github.bananapuncher714.radioboard.util.BukkitUtil;
 
 public enum FrameManager {

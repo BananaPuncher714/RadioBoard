@@ -52,8 +52,8 @@ public class BoardFrame {
 		while ( frameLoc.getBlock().getType() == Material.AIR && frameLoc.getBlock().getRelative( face ).getType() == type ) {
 			while ( frameLoc.getBlock().getType() == Material.AIR && frameLoc.getBlock().getRelative( face ).getType() == type ) {
 				ItemFrame fr = getNearestOrSpawnFrameAt( frameLoc );
-				frames.add( fr.getUniqueId() );
 				fr.setFacingDirection( frame.getFacing() );
+				frames.add( fr.getUniqueId() );
 				ItemStack mapItem = new ItemStack( Material.MAP );
 				
 				// Register this map id

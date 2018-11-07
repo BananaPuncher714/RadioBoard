@@ -48,20 +48,20 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 			if ( args.length == 0 ) {
 				help( sender );
 			} else if ( args.length > 0 ) {
-				if ( args[ 0 ].equalsIgnoreCase( "board" ) ) {
-					board( sender, pop( args ) );
-				} else if ( args[ 0 ].equalsIgnoreCase( "show" ) ) {
-					show( sender, args );
-				} else if ( args[ 0 ].equalsIgnoreCase( "test" ) ) {
-					test( sender, args );
+				String option = args[ 0 ];
+				args = pop( args );
+				if ( option.equalsIgnoreCase( "board" ) ) {
+					board( sender, args );
+				} else if ( option.equalsIgnoreCase( "display" ) ) {
+					display( sender, args );
+				} else if ( option.equalsIgnoreCase( "list" ) ) {
+					list( sender, args );
 				} else {
 					help( sender );
 				}
 			}
 		} catch ( IllegalArgumentException exception ) {
 			sender.sendMessage( exception.getMessage() );
-		} catch ( IOException e ) {
-			e.printStackTrace();
 		}
 		return false;
 	}
@@ -101,6 +101,8 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 		
 		Player player = ( Player ) sender;
 		
+		sender.sendMessage( ChatColor.GREEN + "Creating board..." );
+		
 		Location lookingAt = player.getLastTwoTargetBlocks( ( Set< Material > ) null, 100 ).get( 0 ).getLocation();
 		ItemFrame frame = BukkitUtil.getItemFrameAt( lookingAt );
 		Validate.isTrue( frame != null, ChatColor.RED + "You are not looking at any item frame!" );
@@ -126,7 +128,7 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 		
 		Validate.isTrue( frame != null, ChatColor.RED + "'" + name + "' does not exist!" );
 		
-		FrameManager.INSTANCE.removeFrame( name );
+		FrameManager.INSTANCE.removeFrame( name ).terminate();
 		
 		for ( Player worldPlayer : frame.getTopLeftCorner().getWorld().getPlayers() ) {
 			RadioBoard.getInstance().updateDisplaysFor( worldPlayer );
@@ -135,9 +137,24 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 		sender.sendMessage( ChatColor.GREEN + "Successfully removed a board(" + name + ")!" );
 	}
 	
+	private void display( CommandSender sender, String[] args ) {
+		Validate.isTrue( sender.hasPermission( "radioboard.admin" ), ChatColor.RED + "You do not have permission to run this command!" );
+		Validate.isTrue( args.length > 0, ChatColor.RED + "Incorrect usage! '/radioboard display <create|remove> ...'" );
+
+		String option = args[ 0 ];
+		args = pop( args );
+		if ( option.equalsIgnoreCase( "create" ) ) {
+			displayCreate( sender, args );
+		} else if ( option.equalsIgnoreCase( "remove" ) ) {
+			displayRemove( sender, args );
+		} else {
+			throw new IllegalArgumentException( ChatColor.RED + "Incorrect usage! '/radioboard display <create|remove> ...'" );
+		}
+	}
+	
 	private void displayCreate( CommandSender sender, String[] args ) {
 		Validate.isTrue( sender.hasPermission( "radioboard.admin" ), ChatColor.RED + "You do not have permission to run this command!" );
-		Validate.isTrue( args.length == 2, ChatColor.RED + "Incorrect usage! '/radioboard board create <name> <map-id>'" );
+		Validate.isTrue( args.length == 5, ChatColor.RED + "Incorrect usage! '/radioboard display create <name> <map-id> <file-name> <width> <height>'" );
 		File file = RadioBoard.getCanvasFile( args[ 2 ] );
 		Validate.isTrue( file.exists(), ChatColor.RED + "'" + args[ 2 ] + "' does not exist!" );
 		int mapId;
@@ -160,78 +177,88 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 		} catch ( NumberFormatException exception ) {
 			throw new IllegalArgumentException( ChatColor.RED + "'" + args[ 4 ] + "' is not a valid height!" );
 		}
+		String name = args[ 0 ];
 		
+		sender.sendMessage( ChatColor.GREEN + "Creating display..." );
 		
-	}
-	
-	private void show( CommandSender sender, String[] args ) throws IOException {
-		Validate.isTrue( sender.hasPermission( "radioboard.admin" ), ChatColor.RED + "You do not have permission to run this command!" );
-		Validate.isTrue( sender instanceof Player, ChatColor.RED + "You must be a player to run this command!" );
-		Player player = ( Player ) sender;
-		Validate.isTrue( args.length == 5, ChatColor.RED + "Incorrect usage! '/radioboard show <name> <id> <file> <x:y>'" );
-		File file = new File( plugin.getDataFolder() + "/images/" + args[ 3 ] );
-		Validate.isTrue( file.exists(), ChatColor.RED + args[ 3 ] + " does not exist!" );
-		sender.sendMessage( "Parsing..." );
-		String name = args[ 1 ];
-		
-		int id = Integer.parseInt( args[ 2 ] );
-		String[] split = args[ 4 ].split( ":" );
-		int mapWidth = Integer.parseInt( split[ 0 ] );
-		int mapHeight = Integer.parseInt( split[ 1 ] );
-		
-		MapDisplay display = new RBoard( name, id, mapWidth, mapHeight );
-		
-		FrameManager.INSTANCE.registerDisplay( display );
-		
-		MapDisplayProvider provider;
-		if ( args[ 3 ].endsWith( ".gif" ) ) {
-			provider = new GifPlayer( file );
-			player.sendMessage( "Detected gif!" );
-		} else {
-			BufferedImage image = ImageIO.read( file );
-			provider = new ImageProvider( image );
-		}
-		display.setSource( provider );
-		
-		display.addObserver( new RadioObserver( player.getUniqueId() ) );
-		
-		player.sendMessage( "Created map display!" );
-	}
-	
-	private void test( CommandSender sender, String[] args ) throws IOException {
-		Validate.isTrue( sender.hasPermission( "radioboard.admin" ), ChatColor.RED + "You do not have permission to run this command!" );
-		Validate.isTrue( sender instanceof Player, ChatColor.RED + "You must be a player to run this command!" );
-		Player player = ( Player ) sender;
-		Validate.isTrue( args.length == 5, ChatColor.RED + "Incorrect usage! '/radioboard test <name> <id> <file> <x:y>'" );
-		File canvasFile = RadioBoard.getCanvasFile( args[ 3 ] );
-		Validate.isTrue( canvasFile.exists(), ChatColor.RED + args[ 3 ] + " does not exist!" );
-		
-		String name = args[ 1 ];
-		
-		int id = Integer.parseInt( args[ 2 ] );
-		String[] split = args[ 4 ].split( ":" );
-		int mapWidth = Integer.parseInt( split[ 0 ] );
-		int mapHeight = Integer.parseInt( split[ 1 ] );
-		
-		MapDisplay display = new RBoard( name, id, mapWidth, mapHeight );
+		MapDisplay display = new RBoard( name, mapId, width, height );
 		
 		FrameManager.INSTANCE.registerDisplay( display );
 		RadioBoard.getInstance().configBoards.put( name, args[ 3 ] );
 		
-		FileConfiguration config = YamlConfiguration.loadConfiguration( canvasFile );
+		FileConfiguration config = YamlConfiguration.loadConfiguration( file );
 		RadioCanvas canvas = RadioCanvasFactory.deserialize( config );
 		
 		display.setSource( canvas );
+
+		RadioBoard.getInstance().configBoards.put( display.getId(), args[ 2 ] );
 		
 		for ( Player worldPlayer : Bukkit.getOnlinePlayers() ) {
 			RadioBoard.getInstance().updateDisplaysFor( worldPlayer );
 		}
 		
-		player.sendMessage( "Created map display!" );
+		sender.sendMessage( ChatColor.GREEN + "Successfully created a new display(" + name + ") with the template '" + file.getName() + "'" );
 	}
 	
+	private void displayRemove( CommandSender sender, String[] args ) {
+		Validate.isTrue( sender.hasPermission( "radioboard.admin" ), ChatColor.RED + "You do not have permission to run this command!" );
+		Validate.isTrue( args.length == 1, ChatColor.RED + "Incorrect usage! '/radioboard display remove <name>'" );
+		
+		String name = args[ 0 ];
+		MapDisplay frame = FrameManager.INSTANCE.getDisplay( name );
+		
+		Validate.isTrue( frame != null, ChatColor.RED + "'" + name + "' does not exist!" );
+		
+		FrameManager.INSTANCE.removeDisplay( name ).terminate();
+		
+		sender.sendMessage( ChatColor.GREEN + "Successfully removed a board(" + name + ")!" );
+	}
+	
+	private void list( CommandSender sender, String[] args ) {
+		Validate.isTrue( sender.hasPermission( "radioboard.admin" ), ChatColor.RED + "You do not have permission to run this command!" );
+		Validate.isTrue( args.length == 1, ChatColor.RED + "Incorrect usage! '/radioboard list <boards|displays>'" );
+
+		if ( args[ 0 ].equalsIgnoreCase( "boards" ) ) {
+			if ( FrameManager.INSTANCE.boards.isEmpty() ) {
+				sender.sendMessage( ChatColor.GREEN + "There are no boards registered!" );
+			} else {
+				sender.sendMessage( ChatColor.translateAlternateColorCodes( '&', "&bBoards(&aname&b, &eid&b, &fwidth and height&b, &dlocation&b):" ) );
+				for ( String key : FrameManager.INSTANCE.boards.keySet() ) {
+					BoardFrame frame = FrameManager.INSTANCE.boards.get( key );
+					String info = ChatColor.GREEN + key;
+					info += ChatColor.YELLOW + " " + frame.getId();
+					info += ChatColor.WHITE + " " + frame.getWidth() + "x" + frame.getHeight();
+					Location location = frame.getTopLeftCorner();
+					info += ChatColor.LIGHT_PURPLE + " " + location.getWorld().getName();
+					info += " " + location.getBlockX() + ", " + location.getBlockY() + " " + location.getBlockZ();
+					sender.sendMessage( info );
+				}
+			}
+		} else if ( args[ 0 ].equalsIgnoreCase( "displays" ) ) {
+			if ( FrameManager.INSTANCE.getDisplays().isEmpty() ) {
+				sender.sendMessage( ChatColor.GREEN + "There are no displays registered!" );
+			} else {
+				sender.sendMessage( ChatColor.translateAlternateColorCodes( '&', "&bDisplays(&aname&b, &eid&b, &fwidth and height&b, &dprovider&b):" ) );
+				for ( MapDisplay display : FrameManager.INSTANCE.getDisplays() ) {
+					String info = ChatColor.GREEN + display.getId();
+					info += ChatColor.YELLOW + " " + display.getMapId();
+					info += ChatColor.WHITE + " " + display.getMapWidth() + "x" + display.getMapHeight();
+					if ( RadioBoard.getInstance().configBoards.containsKey( display.getId() ) ) {
+						info += ChatColor.LIGHT_PURPLE + " " + RadioBoard.getInstance().configBoards.get( display.getId() );
+					} else {
+						info += ChatColor.LIGHT_PURPLE + " ?";
+					}
+					sender.sendMessage( info );
+				}
+			}
+		} else {
+			throw new IllegalArgumentException( ChatColor.RED + "Incorrect usage! '/radioboard list <boards|displays>'" );
+		}
+	}
+	
+	
 	private String[] pop( String[] array ) {
-		String[] array2 = new String[ array.length - 1 ];
+		String[] array2 = new String[ Math.max( 0, array.length - 1 ) ];
 		for ( int i = 1; i < array.length; i++ ) {
 			array2[ i - 1 ] = array[ i ];
 		}
