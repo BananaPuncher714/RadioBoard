@@ -2,18 +2,23 @@ package io.github.bananapuncher714.radioboard;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import io.github.bananapuncher714.radioboard.api.MapDisplay;
+import io.github.bananapuncher714.radioboard.api.MapDisplayProvider;
 import io.github.bananapuncher714.radioboard.api.PacketHandler;
-import io.github.bananapuncher714.radioboard.command.RadioBoardCommandExecutor;
 import io.github.bananapuncher714.radioboard.providers.GifPlayer;
+import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvasFactory;
 import io.github.bananapuncher714.radioboard.tinyprotocol.TinyProtocol;
 import io.github.bananapuncher714.radioboard.util.FileUtil;
 import io.github.bananapuncher714.radioboard.util.ReflectionUtil;
@@ -29,7 +34,7 @@ public class RadioBoard extends JavaPlugin {
 	
 	private PlayerListener playerListener;
 	
-	protected Set< String > configBoards = new HashSet< String >();
+	protected Map< String, String > configBoards = new HashMap< String, String >();
 	
 	@Override
 	public void onEnable() {
@@ -101,12 +106,7 @@ public class RadioBoard extends JavaPlugin {
 		if ( boardCacheFile.exists() ) {
 			FileConfiguration boardCache = YamlConfiguration.loadConfiguration( boardCacheFile );
 			if ( boardCache.contains( "displays" ) ) {
-				for ( String displayName : boardCache.getConfigurationSection( "displays" ).getKeys( false ) ) {
-					if ( FrameManager.INSTANCE.loadDisplay( displayName, boardCache.getConfigurationSection( "displays." + displayName ) ) != null ) {
-						getLogger().info( "Registered display '" + displayName + "'" );
-						configBoards.add( displayName );
-					}
-				}
+				loadBoardsFrom( boardCache.getConfigurationSection( "displays" ) );
 			}
 		}
 		
@@ -117,7 +117,64 @@ public class RadioBoard extends JavaPlugin {
 		}
 	}
 	
+	private void loadBoardsFrom( ConfigurationSection section ) {
+		for ( String name : section.getKeys( false ) ) {
+			int id = section.getInt( name + ".id" );
+			int width = section.getInt( name + ".width" );
+			int height = section.getInt( name + ".height" );
+			
+			String presetFileName = section.getString( name + ".provider" );
+			File preset = RadioBoard.getCanvasFile( presetFileName );
+			
+			if ( !preset.exists() ) {
+				continue;
+			}
+			
+			RBoard board = new RBoard( name, id, width, height );
+			FileConfiguration presetSection = YamlConfiguration.loadConfiguration( preset );
+			MapDisplayProvider provider = RadioCanvasFactory.deserialize( presetSection );
+			board.setSource( provider );
+			
+			FrameManager.INSTANCE.registerDisplay( board );
+			
+			configBoards.put( name, presetFileName );
+			
+			getLogger().info( "Registered display " + name );
+		}
+	}
+	
+	private void saveBoardsTo( ConfigurationSection section ) {
+		for ( String boardName : configBoards.keySet() ) {
+			MapDisplay display = FrameManager.INSTANCE.getDisplay( boardName );
+			if ( display == null ) {
+				continue;
+			}
+			
+			section.set( boardName + ".id", display.getMapId() );
+			section.set( boardName + ".width", display.getMapWidth() );
+			section.set( boardName + ".height", display.getMapHeight() );
+			section.set( boardName + ".provider", configBoards.get( boardName ) );
+		}
+	}
+	
 	private void saveToConfig() {
+		File boardCacheFile = new File( getDataFolder() + "/boards.yml" );
+		if ( !boardCacheFile.exists() ) {
+			try {
+				boardCacheFile.createNewFile();
+			} catch ( IOException e ) {
+				e.printStackTrace();
+			}
+		}
+		FileConfiguration boardCache = YamlConfiguration.loadConfiguration( boardCacheFile );
+		boardCache.set( "displays", null );
+		saveBoardsTo( boardCache.createSection( "displays" ) );
+		try {
+			boardCache.save( boardCacheFile );
+		} catch ( IOException e1 ) {
+			e1.printStackTrace();
+		}
+		
 		File frameCacheFile = new File( getDataFolder() + "/frame-cache.yml" );
 		if ( !frameCacheFile.exists() ) {
 			frameCacheFile.getParentFile().mkdirs();
@@ -139,7 +196,11 @@ public class RadioBoard extends JavaPlugin {
 	}
 	
 	public Set< String > getCoreBoards() {
-		return configBoards;
+		return configBoards.keySet();
+	}
+	
+	public void updateDisplaysFor( Player player ) {
+		playerListener.updateMapsFor( player );
 	}
 	
 	public PacketHandler getPacketHandler() {

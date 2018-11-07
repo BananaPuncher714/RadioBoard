@@ -1,4 +1,4 @@
-package io.github.bananapuncher714.radioboard.command;
+package io.github.bananapuncher714.radioboard;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -21,11 +21,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 
-import io.github.bananapuncher714.radioboard.BoardFrame;
-import io.github.bananapuncher714.radioboard.FrameManager;
-import io.github.bananapuncher714.radioboard.RBoard;
-import io.github.bananapuncher714.radioboard.RadioBoard;
-import io.github.bananapuncher714.radioboard.RadioObserver;
 import io.github.bananapuncher714.radioboard.api.MapDisplay;
 import io.github.bananapuncher714.radioboard.api.MapDisplayProvider;
 import io.github.bananapuncher714.radioboard.providers.GifPlayer;
@@ -153,6 +148,7 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 		MapDisplay display = new RBoard( name, id, mapWidth, mapHeight );
 		
 		FrameManager.INSTANCE.registerDisplay( display );
+		RadioBoard.getInstance().configBoards.put( name, args[ 3 ] );
 		
 		FileConfiguration config = YamlConfiguration.loadConfiguration( canvasFile );
 		RadioCanvas canvas = RadioCanvasFactory.deserialize( config );

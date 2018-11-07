@@ -13,12 +13,19 @@ Unfortunately, due to Minecraft's packet limit threshold, it is not possible to 
 RadioBoard comes with a lot of great core features, such as full dynamic interactive boards that support GIFs, images, buttons, switches, and cool special effects.
 
 ### Commands:
-- video <board|show> ...
-  - board <name> <map-id>
-    Execute while looking at an item frame to construct a board. The name is unique per board
-  - show <name> <map-id> <file-name> <x:y>
-    The file has to be located under /plugins/RadioBoard/images/, and the X and Y are the width and height of the maps. The name is arbitrary.
-
+- video <board|display|list> ...
+  - board <create|remove> ...
+    - board create <name> <map-id>
+      Execute while looking at an item frame to construct a board. The name is unique per board
+    - board remove <name>
+      Remove a board with the given name from existence
+  - display <create|remove>
+    - display create <name> <map-id> <file-name> <x:y>
+      Create a new display based off a template which can be found under /plugins/RadioBoard/providers/
+    - display remove <name>
+      Delete a display forever!(A long time!)
+  - list <boards|displays> [page]
+    View detailed information about all registered boards or displays
 ### Contributors:
 - BananaPuncer714: Creator, Developer
 - Jetp250: Developer

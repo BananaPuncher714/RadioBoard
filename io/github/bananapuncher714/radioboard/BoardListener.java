@@ -212,7 +212,7 @@ public class BoardListener implements Listener {
 	private boolean calculate( Player player, DisplayInteract action ) {
 		BoardCoord coord = getBoardCoords( player.getEyeLocation(), player.getLocation().getDirection() );
 		if ( coord == null || !player.hasLineOfSight( coord.frame ) || coord.clicked.distanceSquared( player.getEyeLocation() ) > 4096 ) {
-			return coord != null;
+			return false;
 		}
 		for ( MapDisplay display : FrameManager.INSTANCE.getDisplays() ) {
 			if ( display.getMapId() == coord.board.getId() ) {

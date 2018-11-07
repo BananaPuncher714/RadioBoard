@@ -64,6 +64,9 @@ public enum FrameManager {
 	}
 
 	public MapDisplay removeDisplay( String id ) {
+		if ( RadioBoard.getInstance().configBoards.containsKey( id ) ) {
+			RadioBoard.getInstance().configBoards.remove( id );
+		}
 		return displays.containsKey( id ) ? displays.remove( id ) : null;
 	}
 	
@@ -130,27 +133,5 @@ public enum FrameManager {
 			
 			registerBoard( key, frame );
 		}
-	}
-	
-	protected MapDisplay loadDisplay( String name, ConfigurationSection section ) {
-		int id = section.getInt( "id" );
-		int width = section.getInt( "width" );
-		int height = section.getInt( "height" );
-		
-		String presetFileName = section.getString( "provider" );
-		File preset = RadioBoard.getCanvasFile( presetFileName );
-		
-		if ( !preset.exists() ) {
-			return null;
-		}
-		
-		RBoard board = new RBoard( name, id, width, height );
-		FileConfiguration presetSection = YamlConfiguration.loadConfiguration( preset );
-		MapDisplayProvider provider = RadioCanvasFactory.deserialize( presetSection );
-		board.setSource( provider );
-		
-		registerDisplay( board );
-		
-		return board;
 	}
 }
