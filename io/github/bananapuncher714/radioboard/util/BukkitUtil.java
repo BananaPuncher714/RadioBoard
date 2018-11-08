@@ -29,7 +29,7 @@ public final class BukkitUtil {
 	 * Get a location from a string
 	 * 
 	 * @param string
-	 * Follows the format "<world>%<x>%<y>%<z>%<yaw>%<pitch>" with all periods replaced with tildes(~)
+	 * Follows the format "world%x%y%z%yaw%pitch" with all periods replaced with tildes(~)
 	 * @return
 	 */
 	public static Location getLocation( String string ) {
@@ -38,7 +38,7 @@ public final class BukkitUtil {
 	}
 	
 	/**
-	 * Get a string from a location; follows the format "<world>%<x>%<y>%<z>%<yaw>%<pitch>" with all periods replaced with tildes(~)
+	 * Get a string from a location; follows the format "world%x%y%z%yaw%pitch" with all periods replaced with tildes(~)
 	 * 
 	 * @param location
 	 * @return

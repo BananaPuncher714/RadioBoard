@@ -140,7 +140,7 @@ public abstract class MapDisplay {
 	 * On interact, either a player or a projectile
 	 * 
 	 * @param entity
-	 * The entity that interacts, should only be a projectile if action is {@value DisplayInteract#PROJECTILE}
+	 * The entity that interacts, should only be a projectile if action is {@link DisplayInteract#PROJECTILE}
 	 * @param action
 	 * The action that occurs
 	 * @param id

@@ -21,7 +21,7 @@ public interface MapDisplayProvider {
 	 * @param entity
 	 * Either a player or a projectile
 	 * @param action
-	 * Will only be {@value DisplayInteract#PROJECTILE} if entity is a projectile
+	 * Will only be {@link DisplayInteract#PROJECTILE} if entity is a projectile
 	 * @param x
 	 * The X relative to the top left corner
 	 * @param y

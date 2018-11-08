@@ -46,7 +46,7 @@ public interface RadioIcon {
 	 * @param entity
 	 * The entity, either a player or a projectile
 	 * @param action
-	 * Will always be a player unless action is {@value DisplayInteract#PROJECTILE}
+	 * Will always be a player unless action is {@link DisplayInteract#PROJECTILE}
 	 * @param x
 	 * The X coordinate of the click relative to the top left of this icon
 	 * @param y
