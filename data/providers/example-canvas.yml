@@ -11,7 +11,7 @@ elements:
       on-image: "example/logo.png"
       on-command: "/tellraw %player_name% [\"\",{\"text\":\"Thanks for using \",\"color\":\"gold\"},{\"text\":\"RadioBoard\",\"color\":\"light_purple\"},{\"text\":\"!\",\"color\":\"gold\"}]"
       off-image: "example/logo.png"
-      off-command: "/tellraw %player_name% {\"text\":\"Be sure to check out the documentation!\",\"color\":\"gold\"}"
+      off-command: "/tellraw %player_name% {\"text\":\"Be sure to check out the documentation!\",\"color\":\"gold\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://github.com/BananaPuncher714/RadioBoard/wiki\"}}"
   - type: "GIF"
     x: 480
     y: 80

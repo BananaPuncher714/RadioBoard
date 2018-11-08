@@ -98,7 +98,8 @@ There are currently 5 different types of elements. A BUTTON, CLOUD, IMAGE, SWITC
 - Gifs require a `gif` option, which tells the location of a gif relative to the image folder.
 
 ## Tutorials:
-For more, check out the Github wiki and repo!
+For more, check out the [Github wiki](https://github.com/BananaPuncher714/RadioBoard/wiki) and [repo](https://github.com/BananaPuncher714/RadioBoard)!
+You can find the javadocs [here](https://bananapuncher714.github.io/RadioBoard/)
 
 ## Credits
 ### Contributors:
