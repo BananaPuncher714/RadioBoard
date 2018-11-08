@@ -1,5 +1,9 @@
 # __RadioBoard__
 ![RadioBoard logo](https://i.imgur.com/bCKA5dO.png)
+## Tutorials:
+For immediate information, check out the [Github wiki](https://github.com/BananaPuncher714/RadioBoard/wiki) and [repo](https://github.com/BananaPuncher714/RadioBoard)!
+You can find the javadocs [here](https://bananapuncher714.github.io/RadioBoard/)
+
 ## About
 ### What is this?
 RadioBoard is a Bukkit plugin that uses map items to draw pictures and play GIFs. It is comprised of 2 parts, virtual canvases, and board frames
@@ -96,10 +100,6 @@ There are currently 5 different types of elements. A BUTTON, CLOUD, IMAGE, SWITC
 - Images require a `image` option, which is the name of the image file the user wants to display.
 - Switches require `on-image`, `off-image`, `on-command`, and `off-command`. The images are what gets displayed when the switch is on or off, and the commands are what gets run when the switch gets flipped. Commands get parsed just like button commands.
 - Gifs require a `gif` option, which tells the location of a gif relative to the image folder.
-
-## Tutorials:
-For more, check out the [Github wiki](https://github.com/BananaPuncher714/RadioBoard/wiki) and [repo](https://github.com/BananaPuncher714/RadioBoard)!
-You can find the javadocs [here](https://bananapuncher714.github.io/RadioBoard/)
 
 ## Credits
 ### Contributors:
