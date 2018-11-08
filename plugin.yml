@@ -8,6 +8,9 @@ softdepend:
 - "Multiverse-Core"
 - "PlaceholderAPI"
 description: The ultimate universal map display plugin
+permissions:
+    radioboard.admin:
+        default: op
 commands:
     radioboard:
         aliases: []
