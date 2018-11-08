@@ -94,8 +94,9 @@ public class RadioBoard extends JavaPlugin {
 			playerListener.updateMapsFor( player );
 		}
 		
-		getCommand( "video" ).setExecutor( new RadioBoardCommandExecutor( this ) );
-		
+		RadioBoardCommandExecutor command = new RadioBoardCommandExecutor( this );
+		getCommand( "radioboard" ).setExecutor( command );
+		getCommand( "radioboard" ).setTabCompleter( command );
 	}
 
 	@Override

@@ -1,19 +1,25 @@
 # __RadioBoard__
+![RadioBoard logo](https://i.imgur.com/bCKA5dO.png)
 ## About
 ### What is this?
 RadioBoard is a Bukkit plugin that uses map items to draw pictures and play GIFs. It is comprised of 2 parts, virtual canvases, and board frames
 
 Virtual canvases are just a blank slate upon which images or shapes can be draw on, and displayed to the player. They can be spread across several board frames, or none at all.
 
-Board frames are in-game structures that are made of a wall with an array of item frames with maps inside of them. Board frames can be of any width or height, and several can be made to show the same Virtual Canvas.
+Board frames are in-game structures that are made of a wall with an array of item frames with maps inside of them. Board frames can be of any width or height, and several can be made to show the same Virtual Canvas. Here is an example of one:
+![boardframe](https://i.imgur.com/cIj5qWb.png)
 
 Most of RadioBoard configuration is done through other plugins, or configs. RadioBoard will generate 2 folders by default, one for images and another for display providers. The image folder has the path `/plugins/RadioBoard/images` and the provider folder has the path `/plugins/RadioBoard/providers`. These are where you will place resources that you want to include for your boards. Virtual canvases can be added through the `/plugins/RadioBoard/boards.yml` file.
 
+RadioBoard also supports *very* accurate click detection and can detect exactly what pixel has been clicked.
+
 ### How does this work?
 You can have several BoardFrames positioned around important places, such as the spawn, or your hub. Along with those, you can link displays to show something, such as a welcome message. Only people in the same world and with the proper permissions will be able to see, or interact with them at all. As a bonus, the item frames that make up the board cannot be destroyed normally.
+![kingey](https://i.imgur.com/Za1jkqe.png)
 
 ### Limitations:
-Unfortunately, due to Minecraft's packet limit threshold, it is not possible to send an unlimited amount of map packets at the player without the client timing out. Gifs and animations should be limited to roughly 500 full map packets per second. This does *not* mean that the server cannot send out more than 500 packets, simply that any individual player should not receive more than 500 packets per second.
+Unfortunately, due to Minecraft's packet limit threshold, it is not possible to send an unlimited amount of map packets at the player without the client timing out. Gifs and animations should be limited to roughly 500 full map packets per second. This does *not* mean that the server cannot send out more than 500 packets, simply that any individual player should not receive more than 500 packets per second. RadioBoard already optimizes the packet size as much as possible, so try not to break it. :)
+![gif](https://i.imgur.com/sDYRBcj.gif)
 
 ### Versions supported:
 RadioBoard supports versions 1.11.2 and 1.12.2 at the moment. I will *NOT* be supporting 1.10 or below due to how outdated they are.
