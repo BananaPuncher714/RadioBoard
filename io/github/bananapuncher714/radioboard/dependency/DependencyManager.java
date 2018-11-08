@@ -6,6 +6,9 @@ import org.bukkit.entity.Player;
 public class DependencyManager {
 	private static boolean placeholderAPI = Bukkit.getPluginManager().isPluginEnabled( "PlaceholderAPI" );
 	
+	private DependencyManager() {
+	}
+	
 	public static void init() {
 	}
 	

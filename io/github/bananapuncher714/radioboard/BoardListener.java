@@ -217,6 +217,9 @@ public class BoardListener implements Listener {
 		for ( MapDisplay display : FrameManager.INSTANCE.getDisplays() ) {
 			if ( display.getMapId() == coord.board.getId() ) {
 				if ( display.isObserving( new RadioObserver( player.getUniqueId() ) ) ) {
+					if ( RadioBoard.getInstance().getCoreBoards().contains( display.getId() ) && !player.hasPermission( "radioboard.board." + display.getId() + ".interact" ) ) {
+						continue;
+					}
 					display.onClick( player, action, coord.map, coord.x, coord.y );
 					return true;
 				}

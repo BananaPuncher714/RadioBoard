@@ -6,7 +6,9 @@ package io.github.bananapuncher714.radioboard.api;
  * @author BananaPuncher714
  */
 public class Frame {
-	// The time of creation
+	/**
+	 * The time of creation
+	 */
 	public final long timestamp = System.currentTimeMillis();
 	
 	// Simple final variables

@@ -16,7 +16,9 @@ import org.bukkit.map.MapPalette;
  * @author jetp250
  */
 public final class JetpImageUtil {
-
+	private JetpImageUtil() {
+	}
+	
 	// Test dithering of random colors
 	public static void main( String[] args ) {
 

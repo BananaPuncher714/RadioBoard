@@ -3,7 +3,10 @@ package io.github.bananapuncher714.radioboard.util;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-public class VectorUtil {
+public final class VectorUtil {
+	private VectorUtil() {
+	}
+	
 	/**
 	 * Calculate the exact location at which a vector intersects a given plane
 	 * 

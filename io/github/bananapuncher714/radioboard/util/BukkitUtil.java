@@ -6,6 +6,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 
 public final class BukkitUtil {
+	private BukkitUtil() {
+	}
+	
 	/**
 	 * Gets an item frame at a given location; ignores orientation
 	 * 

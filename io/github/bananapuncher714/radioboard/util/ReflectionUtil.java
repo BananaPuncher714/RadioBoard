@@ -4,11 +4,14 @@ import org.bukkit.Bukkit;
 
 import io.github.bananapuncher714.radioboard.api.PacketHandler;
 
-public class ReflectionUtil {
-public static final String VERSION;
+public final class ReflectionUtil {
+	public static final String VERSION;
 	
 	static {
 		VERSION = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+	}
+
+	private ReflectionUtil() {
 	}
 	
 	public static PacketHandler getNewPacketHandlerInstance() {

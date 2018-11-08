@@ -10,6 +10,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 public final class FileUtil {
+	private FileUtil() {
+	}
+	
 	static final int BUFFER_SIZE = 8192;
 	
 	public static void saveToFile( InputStream stream, File output, boolean force ) {

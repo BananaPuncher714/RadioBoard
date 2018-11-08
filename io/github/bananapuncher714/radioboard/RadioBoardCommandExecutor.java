@@ -1,12 +1,10 @@
 package io.github.bananapuncher714.radioboard;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import javax.imageio.ImageIO;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -21,11 +19,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 import io.github.bananapuncher714.radioboard.api.MapDisplay;
-import io.github.bananapuncher714.radioboard.api.MapDisplayProvider;
-import io.github.bananapuncher714.radioboard.providers.GifPlayer;
-import io.github.bananapuncher714.radioboard.providers.ImageProvider;
 import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvas;
 import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvasFactory;
 import io.github.bananapuncher714.radioboard.util.BukkitUtil;
@@ -38,8 +34,31 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 	}
 	
 	@Override
-	public List< String > onTabComplete( CommandSender arg0, Command arg1, String arg2, String[] arg3 ) {
-		return null;
+	public List< String > onTabComplete( CommandSender sender, Command command, String label, String[] args ) {
+		List< String > aos = new ArrayList< String >();
+		if ( !sender.hasPermission( "radioboard.admin" ) ) {
+			return aos;
+		}
+		
+		if ( args.length == 1 ) {
+			aos.add( "board" );
+			aos.add( "list" );
+			aos.add( "display" );
+		} else if ( args.length == 2 ) {
+			if ( args[ 0 ].equalsIgnoreCase( "board" ) ) {
+				aos.addAll( FrameManager.INSTANCE.boards.keySet() );
+			} else if ( args[ 0 ].equalsIgnoreCase( "display" ) ) {
+				aos.addAll( FrameManager.INSTANCE.displays.keySet() );
+			} else if ( args[ 0 ].equalsIgnoreCase( "list" ) ) {
+				aos.add( "boards" );
+				aos.add( "displays" );
+			}
+		}
+		
+		List< String > completions = new ArrayList< String >();
+		StringUtil.copyPartialMatches( args[ args.length - 1 ], aos, completions );
+		Collections.sort( completions );
+		return completions;
 	}
 
 	@Override

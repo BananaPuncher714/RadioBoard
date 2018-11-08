@@ -68,7 +68,7 @@ public class GifPlayer extends Thread implements MapDisplayProvider {
 		display = null;
 	}
 	
-	public void 死んでる() {
+	public void terminate() {
 		RUNNING = false;
 	}
 
@@ -105,6 +105,6 @@ public class GifPlayer extends Thread implements MapDisplayProvider {
 
 	@Override
 	public void stopProviding() {
-		死んでる();
+		terminate();
 	}
 }
