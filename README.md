@@ -2,7 +2,9 @@
 ![RadioBoard logo](https://i.imgur.com/bCKA5dO.png)
 ## Tutorials:
 For immediate information, check out the [Github wiki](https://github.com/BananaPuncher714/RadioBoard/wiki) and [repo](https://github.com/BananaPuncher714/RadioBoard)!
+
 You can find the javadocs [here](https://bananapuncher714.github.io/RadioBoard/)
+
 Download it [here](https://www.spigotmc.org/resources/radioboard.62210/)
 
 ## About
