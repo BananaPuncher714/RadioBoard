@@ -102,5 +102,5 @@ For more, check out the Github wiki and repo!
 
 ## Credits
 ### Contributors:
-- `BananaPuncer714` Creator, Developer
+- `BananaPuncher714` Creator, Developer
 - `Jetp250` Developer
