@@ -13,6 +13,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import io.github.bananapuncher714.radioboard.api.MapDisplay;
 import io.github.bananapuncher714.radioboard.util.BukkitUtil;
 
+/**
+ * Singleton to hold all {@link BoardFrame} and {@link MapDisplay} objects
+ * 
+ * @author BananaPuncher714
+ */
 public enum FrameManager {
 	INSTANCE;
 	
@@ -68,7 +73,7 @@ public enum FrameManager {
 		return displays.values();
 	}
 	
-	public void terminate() {
+	protected void terminate() {
 		for ( MapDisplay display : displays.values() ) {
 			display.terminate();
 		}

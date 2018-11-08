@@ -1,10 +1,14 @@
 package io.github.bananapuncher714.radioboard.providers.canvas;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 
+/**
+ * Displays a simple image
+ * 
+ * @author BananaPuncher714
+ */
 public class RadioIconImage implements RadioIcon {
 	protected int[] image;
 	protected int width;

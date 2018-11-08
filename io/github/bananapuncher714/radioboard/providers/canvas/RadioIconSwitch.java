@@ -10,6 +10,11 @@ import org.bukkit.projectiles.ProjectileSource;
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 import io.github.bananapuncher714.radioboard.dependency.DependencyManager;
 
+/**
+ * A simple switch that runs different commands for each state it can be in
+ * 
+ * @author BananaPuncher714
+ */
 public class RadioIconSwitch implements RadioIcon {
 	protected int[] switchOff;
 	protected int[] switchOn;

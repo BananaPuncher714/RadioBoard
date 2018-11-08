@@ -11,7 +11,22 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import io.github.bananapuncher714.radioboard.RadioBoard;
 
-public class RadioCanvasFactory {
+/**
+ * Utility class used to deserialize ConfigurationSections into RadioCanvases; Internal usage mostly
+ * 
+ * @author BananaPuncher714
+ */
+public final class RadioCanvasFactory {
+	private RadioCanvasFactory() {
+	}
+
+	/**
+	 * Deserialize a section into a RadioCanvas with corresponding components
+	 * 
+	 * @param section
+	 * Must conform to the RadioBoard canvas format
+	 * @return
+	 */
 	public static RadioCanvas deserialize( ConfigurationSection section ) {
 		int width = section.getInt( "width" );
 		int height = section.getInt( "height" );

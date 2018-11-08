@@ -3,7 +3,6 @@ package io.github.bananapuncher714.radioboard;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,13 +16,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 import io.github.bananapuncher714.radioboard.api.MapDisplay;
 import io.github.bananapuncher714.radioboard.api.MapDisplayProvider;
 import io.github.bananapuncher714.radioboard.api.PacketHandler;
-import io.github.bananapuncher714.radioboard.providers.GifPlayer;
 import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvasFactory;
 import io.github.bananapuncher714.radioboard.tinyprotocol.TinyProtocol;
 import io.github.bananapuncher714.radioboard.util.FileUtil;
 import io.github.bananapuncher714.radioboard.util.ReflectionUtil;
 import io.netty.channel.Channel;
 
+/**
+ * RadioBoard's core
+ * 
+ * @author BananaPuncher714
+ */
 public class RadioBoard extends JavaPlugin {
 	private static RadioBoard INSTANCE;
 	private static final String FILE_IMAGES = "/images/";
@@ -195,14 +198,31 @@ public class RadioBoard extends JavaPlugin {
 		}
 	}
 	
+	/**
+	 * Get a list of this plugin's boards that were loaded from the boards.yml
+	 * 
+	 * @return
+	 * The ids of default boards
+	 */
 	public Set< String > getCoreBoards() {
 		return configBoards.keySet();
 	}
 	
+	/**
+	 * Update all default displays for a given player
+	 * 
+	 * @param player
+	 * Player to update for
+	 */
 	public void updateDisplaysFor( Player player ) {
 		playerListener.updateMapsFor( player );
 	}
 
+	/**
+	 * Get the NMS implementation for sending map updates and stuff
+	 * 
+	 * @return
+	 */
 	public PacketHandler getPacketHandler() {
 		return packetHandler;
 	}

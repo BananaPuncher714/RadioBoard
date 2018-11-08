@@ -24,6 +24,11 @@ import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 import io.github.bananapuncher714.radioboard.api.MapDisplay;
 import io.github.bananapuncher714.radioboard.util.VectorUtil;
 
+/**
+ * Internal use only
+ * 
+ * @author BananaPuncher714
+ */
 public class BoardListener implements Listener {
 	private class BoardCoord {
 		private final BoardFrame board;

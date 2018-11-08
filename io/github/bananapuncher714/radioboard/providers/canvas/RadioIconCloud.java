@@ -6,6 +6,11 @@ import org.bukkit.util.noise.SimplexNoiseGenerator;
 
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 
+/**
+ * Used to apply a "cloudy" effect to certain portions of the {@link RadioCanvas}
+ * 
+ * @author BananaPuncher714
+ */
 public class RadioIconCloud extends Thread implements RadioIcon {
 	private volatile boolean RUNNING = true;
 	

@@ -2,6 +2,11 @@ package io.github.bananapuncher714.radioboard;
 
 import java.util.UUID;
 
+/**
+ * A player's UUID for async operations
+ * 
+ * @author BananaPuncher714
+ */
 public class RadioObserver {
 	protected final UUID uuid;
 	

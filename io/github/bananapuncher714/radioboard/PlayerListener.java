@@ -14,6 +14,11 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 
 import io.github.bananapuncher714.radioboard.api.MapDisplay;
 
+/**
+ * Internal use only
+ * 
+ * @author BananaPuncher714
+ */
 public class PlayerListener implements Listener {
 	private RadioBoard plugin;
 

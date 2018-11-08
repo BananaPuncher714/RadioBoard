@@ -5,13 +5,17 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 import io.github.bananapuncher714.radioboard.util.GifDecoder;
 import io.github.bananapuncher714.radioboard.util.GifDecoder.GifImage;
 import io.github.bananapuncher714.radioboard.util.JetpImageUtil;
 
+/**
+ * Plays a gif
+ * 
+ * @author BananaPuncher714
+ */
 public class RadioIconGif extends Thread implements RadioIcon {
 	private volatile boolean RUNNING = true;
 	

@@ -4,13 +4,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.projectiles.ProjectileSource;
 
 import io.github.bananapuncher714.radioboard.RadioBoard;
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 import io.github.bananapuncher714.radioboard.dependency.DependencyManager;
 
+/**
+ * A button that stays pressed for a certain amount of time and can run a command
+ * 
+ * @author BananaPuncher714
+ */
 public class RadioIconButton implements RadioIcon {
 	int[] unclicked;
 	int[] clicked;

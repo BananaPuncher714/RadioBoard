@@ -26,10 +26,15 @@ import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvas;
 import io.github.bananapuncher714.radioboard.providers.canvas.RadioCanvasFactory;
 import io.github.bananapuncher714.radioboard.util.BukkitUtil;
 
+/**
+ * For internal use only
+ * 
+ * @author BananaPuncher714
+ */
 public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter {
-	RadioBoard plugin;
+	private RadioBoard plugin;
 	
-	public RadioBoardCommandExecutor( RadioBoard plugin ) {
+	protected RadioBoardCommandExecutor( RadioBoard plugin ) {
 		this.plugin = plugin;
 	}
 	
@@ -133,7 +138,7 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 		FrameManager.INSTANCE.registerBoard( name, board );
 		
 		for ( Player worldPlayer : player.getWorld().getPlayers() ) {
-			RadioBoard.getInstance().updateDisplaysFor( worldPlayer );
+			plugin.updateDisplaysFor( worldPlayer );
 		}
 		sender.sendMessage( ChatColor.GREEN + "Successfully set up a new board(" + name + ") with map id '" + mapId + "'" );
 	}
@@ -150,7 +155,7 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 		FrameManager.INSTANCE.removeFrame( name ).terminate();
 		
 		for ( Player worldPlayer : frame.getTopLeftCorner().getWorld().getPlayers() ) {
-			RadioBoard.getInstance().updateDisplaysFor( worldPlayer );
+			plugin.updateDisplaysFor( worldPlayer );
 		}
 		
 		sender.sendMessage( ChatColor.GREEN + "Successfully removed a board(" + name + ")!" );
@@ -203,17 +208,17 @@ public class RadioBoardCommandExecutor implements CommandExecutor, TabCompleter 
 		MapDisplay display = new RBoard( name, mapId, width, height );
 		
 		FrameManager.INSTANCE.registerDisplay( display );
-		RadioBoard.getInstance().configBoards.put( name, args[ 3 ] );
+		plugin.configBoards.put( name, args[ 3 ] );
 		
 		FileConfiguration config = YamlConfiguration.loadConfiguration( file );
 		RadioCanvas canvas = RadioCanvasFactory.deserialize( config );
 		
 		display.setSource( canvas );
 
-		RadioBoard.getInstance().configBoards.put( display.getId(), args[ 2 ] );
+		plugin.configBoards.put( display.getId(), args[ 2 ] );
 		
 		for ( Player worldPlayer : Bukkit.getOnlinePlayers() ) {
-			RadioBoard.getInstance().updateDisplaysFor( worldPlayer );
+			plugin.updateDisplaysFor( worldPlayer );
 		}
 		
 		sender.sendMessage( ChatColor.GREEN + "Successfully created a new display(" + name + ") with the template '" + file.getName() + "'" );
