@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.bukkit.map.MapPalette;
 
 /**
- * What a piece of optimization...
+ * What a piece of optimization;
  * Performs incredibly fast Minecraft color conversion and dithering.
  * 
  * @author jetp250

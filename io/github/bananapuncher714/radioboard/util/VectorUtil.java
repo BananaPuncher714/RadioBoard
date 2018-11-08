@@ -3,6 +3,11 @@ package io.github.bananapuncher714.radioboard.util;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+/**
+ * Simple vector math
+ * 
+ * @author BananaPuncher714
+ */
 public final class VectorUtil {
 	private VectorUtil() {
 	}

@@ -9,6 +9,11 @@ import java.io.OutputStream;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+/**
+ * File utility for copying and updating FileConfigurations
+ * 
+ * @author BananaPuncher714
+ */
 public final class FileUtil {
 	private FileUtil() {
 	}

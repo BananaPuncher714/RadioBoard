@@ -4,6 +4,11 @@ import org.bukkit.Bukkit;
 
 import io.github.bananapuncher714.radioboard.api.PacketHandler;
 
+/**
+ * Internal use only
+ * 
+ * @author BananaPuncher714
+ */
 public final class ReflectionUtil {
 	public static final String VERSION;
 	

@@ -5,6 +5,11 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 
+/**
+ * Simple bukkit utilites for serializing/deserializing locations and getting ItemFrames
+ * 
+ * @author BananaPuncher714
+ */
 public final class BukkitUtil {
 	private BukkitUtil() {
 	}

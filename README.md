@@ -11,7 +11,7 @@ Most of RadioBoard configuration is done through other plugins, or configs. Radi
 ### Limitations:
 Unfortunately, due to Minecraft's packet limit threshold, it is not possible to send an unlimited amount of map packets at the player without the client timing out. Gifs and animations should be limited to roughly 500 full map packets per second. This does *not* mean that the server cannot send out more than 500 packets, simply that any individual player should not receive more than 500 packets per second.
 
-### Usage:
+## Usage:
 RadioBoard comes with a lot of great core features, such as full dynamic interactive boards that support GIFs, images, buttons, switches, and cool special effects. It also includes a full api for developers.
 
 ### Commands:
@@ -37,6 +37,7 @@ RadioBoard comes with a lot of great core features, such as full dynamic interac
 - `radioboard.board.<board>.interact`
   Allows users to interact with a default board, assuming they can see it
 
+## Credits
 ### Contributors:
 - `BananaPuncer714` Creator, Developer
 - `Jetp250` Developer
