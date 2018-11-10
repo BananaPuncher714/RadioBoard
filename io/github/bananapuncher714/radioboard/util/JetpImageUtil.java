@@ -108,7 +108,7 @@ public final class JetpImageUtil {
 
 		int val = 0;
 		float best_distance = Float.MAX_VALUE;
-		for ( int i = 4; i < 128; ++i ) {
+		for ( int i = 4; i < PALETTE.length; ++i ) {
 			int col = PALETTE[ i ];
 			int cr = col >> 16 & 0xFF;
 			int cg = col >> 8 & 0xFF;
