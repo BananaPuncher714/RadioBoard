@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -51,12 +53,27 @@ public final class JetpImageUtil {
 	}
 
 	static {
-		PALETTE = new int[ 256 ];
+		List< Integer > colors = new ArrayList< Integer >();
 
-		fillPalette();
+//		fillPalette();
 //		grayscale();
 
 		long start = System.nanoTime();
+		for ( int i = 0; i < 256; ++i ) {
+			try {
+				Color color = MapPalette.getColor( ( byte ) i );
+				colors.add( color.getRGB() );
+			} catch ( IndexOutOfBoundsException e ) {
+				System.out.println( "Captured " + ( i - 1 ) + " colors!" );
+				break;
+			}
+		}
+		PALETTE = new int[ colors.size() ];
+		int index = 0;
+		for ( int color : colors ) {
+			PALETTE[ index++ ] = color;
+		}
+		
 		for ( int r = 0; r < 256; r += 8 ) {
 			for ( int g = 0; g < 256; g += 8 ) {
 				for ( int b = 0; b < 256; b += 8 ) {
@@ -64,6 +81,7 @@ public final class JetpImageUtil {
 				}
 			}
 		}
+		
 		long end = System.nanoTime();
 		System.out.println( "Initial lookup table initialized in " + ( end - start ) / 1_000_000.0 + " ms" );
 	}
@@ -189,7 +207,7 @@ public final class JetpImageUtil {
 				red   = ( red   += buffer2[ index++ ] ) > 255 ? 255 : red   < 0 ? 0 : red;
 				green = ( green += buffer2[ index++ ] ) > 255 ? 255 : green < 0 ? 0 : green;
 				blue  = ( blue  += buffer2[ index   ] ) > 255 ? 255 : blue  < 0 ? 0 : blue;
-				int matched_color = PALETTE[ getBestColor( red, green, blue ) ];
+				int matched_color = PALETTE[ Byte.toUnsignedInt( getBestColor( red, green, blue ) ) ];
 				int delta_r = red   - ( matched_color >> 16 & 0xFF );
 				int delta_g = green - ( matched_color >> 8  & 0xFF );
 				int delta_b = blue  - ( matched_color       & 0xFF );
