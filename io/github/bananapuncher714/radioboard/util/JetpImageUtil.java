@@ -55,9 +55,6 @@ public final class JetpImageUtil {
 	static {
 		List< Integer > colors = new ArrayList< Integer >();
 
-//		fillPalette();
-//		grayscale();
-
 		long start = System.nanoTime();
 		for ( int i = 0; i < 256; ++i ) {
 			try {
@@ -74,10 +71,11 @@ public final class JetpImageUtil {
 			PALETTE[ index++ ] = color;
 		}
 		
-		for ( int r = 0; r < 256; r += 8 ) {
-			for ( int g = 0; g < 256; g += 8 ) {
-				for ( int b = 0; b < 256; b += 8 ) {
-					getBestColor( r, g, b );
+		for ( int r = 0; r < 256; r += 2 ) {
+			for ( int g = 0; g < 256; g += 2 ) {
+				for ( int b = 0; b < 256; b += 2 ) {
+					int colorIndex = r >> 1 << 14 | g >> 1 << 7 | b >> 1;
+					COLOR_MAP[ colorIndex ] = computeNearest( PALETTE, r, g, b );
 				}
 			}
 		}
@@ -86,62 +84,28 @@ public final class JetpImageUtil {
 		System.out.println( "Initial lookup table initialized in " + ( end - start ) / 1_000_000.0 + " ms" );
 	}
 
-	private static void fillPalette() {
-		for ( int i = 0; i < 256; ++i ) {
-			Color color = null;
-			try {
-				color = MapPalette.getColor( ( byte ) i );
-			} catch ( IndexOutOfBoundsException e ) {
-				System.out.println( "Captured " + ( i - 1 ) + " colors!" );
-				return;
-			}
-			if ( color != null ) {
-				PALETTE[ i ] = color.getRGB();
-			}
-
-			// Incorrect rgb calculation
-//			int rgb = color.getRGB();
-//			int red = (rgb >> 16 & 0xFF) >> 1;
-//			int green = (rgb >> 8 & 0xFF) >> 1;
-//			int blue = rgb & 0xFF >> 1;
-//			COLOR_MAP[red << 8 | green << 4 | blue] = (byte) i;
-		}
-	}
-
-	private static void grayscale() {
-		for ( byte i = 0; i > -127; i++ ) {
-			Color color = MapPalette.getColor(i);
-			if (color.getRed() == color.getGreen() && color.getGreen() == color.getBlue()) {
-				PALETTE[ i ] = color.getRGB();
-			}
-		}
+	public static byte getBestColor( int rgb ) {
+		return COLOR_MAP[ ( rgb >> 16 & 0xFF ) >> 1 << 14 | ( rgb >> 8 & 0xFF ) >> 1 << 7 | ( rgb & 0xFF ) >> 1 ];
 	}
 
 	public static byte getBestColor( int red, int green, int blue ) {
-		int index = red >> 1 << 14 | green >> 1 << 7 | blue >> 1;
-		byte cached = COLOR_MAP[ index ];
-		if ( cached > 0 ) {
-			return cached;
-		}
-
+		return COLOR_MAP[ red >> 1 << 14 | green >> 1 << 7 | blue >> 1 ];
+	}
+	
+	private static byte computeNearest( int[] palette, int red, int green, int blue ) {
 		int val = 0;
 		float best_distance = Float.MAX_VALUE;
-		for ( int i = 4; i < PALETTE.length; ++i ) {
-			int col = PALETTE[ i ];
-			int cr = col >> 16 & 0xFF;
-			int cg = col >> 8 & 0xFF;
-			int cb = col & 0xFF;
-			float distance = getDistance( red, green, blue, cr, cg, cb );
-			if ( distance < best_distance ) {
+		for (int i = 4; i < palette.length; ++i) {
+			int col = palette[i];
+			float distance = getDistance(red, green, blue, col >> 16 & 0xFF, col >> 8 & 0xFF, col & 0xFF);
+			if (distance < best_distance) {
 				best_distance = distance;
 				val = i;
 			}
 		}
-		byte asByte = ( byte ) val;
-		COLOR_MAP[ index ] = asByte;
-		return asByte;
+		return (byte) val;
 	}
-
+	
 	private static float getDistance( int red, int green, int blue, int red2, int green2, int blue2 ) {
 		float red_avg = ( red + red2 ) * .5f;
 		int r = red - red2;
