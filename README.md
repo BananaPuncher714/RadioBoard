@@ -1,5 +1,5 @@
 # __RadioBoard__
-![RadioBoard logo](https://i.imgur.com/bCKA5dO.png)
+![RadioBoard logo](https://i.imgur.com/4ryVOGs.png)
 ## Tutorials:
 For immediate information, check out the [Github wiki](https://github.com/BananaPuncher714/RadioBoard/wiki) and [repo](https://github.com/BananaPuncher714/RadioBoard)!
 
@@ -108,3 +108,5 @@ There are currently 5 different types of elements. A BUTTON, CLOUD, IMAGE, SWITC
 ### Contributors:
 - `BananaPuncher714` Creator, Developer
 - `Jetp250` Developer
+- `Aeternum` Artist
+- `AaronStrange` Beta Tester
