@@ -9,9 +9,11 @@ elements:
     height: 100
     data:
       on-image: "example/logo.png"
-      on-command: "/tellraw %player_name% [\"\",{\"text\":\"Thanks for using \",\"color\":\"gold\"},{\"text\":\"RadioBoard\",\"color\":\"light_purple\"},{\"text\":\"!\",\"color\":\"gold\"}]"
+      on-command:
+      - "/tellraw %player_name% [\"\",{\"text\":\"Thanks for using \",\"color\":\"gold\"},{\"text\":\"RadioBoard\",\"color\":\"light_purple\"},{\"text\":\"!\",\"color\":\"gold\"}]"
       off-image: "example/logo.png"
-      off-command: "/tellraw %player_name% {\"text\":\"Be sure to check out the documentation!\",\"color\":\"gold\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://github.com/BananaPuncher714/RadioBoard/wiki\"}}"
+      off-command:
+      - "/tellraw %player_name% {\"text\":\"Be sure to check out the documentation!\",\"color\":\"gold\",\"clickEvent\":{\"action\":\"open_url\",\"value\":\"https://github.com/BananaPuncher714/RadioBoard/wiki\"}}"
   - type: "GIF"
     x: 480
     y: 80
@@ -34,5 +36,6 @@ elements:
     data:
       clicked-image: "example/on-switch.png"
       unclicked-image: "example/off-switch.png"
-      command: "give %player_name% stick"
+      command:
+      - "give %player_name% stick"
       button-delay: 500

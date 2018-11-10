@@ -1,5 +1,7 @@
 package io.github.bananapuncher714.radioboard.providers.canvas;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -17,18 +19,18 @@ import io.github.bananapuncher714.radioboard.dependency.DependencyManager;
 public class RadioIconButton implements RadioIcon {
 	int[] unclicked;
 	int[] clicked;
-	protected String command;
+	protected List< String > commands;
 	int width;
 	long delay;
 	boolean pressed = false;
 	
 	protected RadioCanvas provider;
 	
-	public RadioIconButton( int[] unclicked, int[] clicked, int width, String command, long delay ) {
+	public RadioIconButton( int[] unclicked, int[] clicked, int width, List< String > command, long delay ) {
 		this.width = width;
 		this.unclicked = unclicked;
 		this.clicked = clicked;
-		this.command = command;
+		this.commands = command;
 		this.delay = delay;
 	}
 	
@@ -66,14 +68,16 @@ public class RadioIconButton implements RadioIcon {
 		Player player = ( Player ) entity;
 		pressed = true;
 		provider.update( this );
-		
-		String cmd = command.replace( "%player_name%", player.getName() );
-		CommandSender sender = Bukkit.getConsoleSender();
-		if ( cmd.startsWith( "/" ) ) {
-			cmd = cmd.substring( 1 );
-			sender = player;
+
+		for ( String command : commands ) {
+			String cmd = command.replace( "%player_name%", player.getName() );
+			CommandSender sender = Bukkit.getConsoleSender();
+			if ( cmd.startsWith( "/" ) ) {
+				cmd = cmd.substring( 1 );
+				sender = player;
+			}
+			Bukkit.dispatchCommand( sender, DependencyManager.parse( player, cmd ) );
 		}
-		Bukkit.dispatchCommand( sender, DependencyManager.parse( player, cmd ) );
 		
 		Bukkit.getScheduler().runTaskAsynchronously( RadioBoard.getInstance(), new Runnable() {
 			@Override

@@ -1,5 +1,7 @@
 package io.github.bananapuncher714.radioboard.providers.canvas;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -18,18 +20,18 @@ import io.github.bananapuncher714.radioboard.dependency.DependencyManager;
 public class RadioIconSwitch implements RadioIcon {
 	protected int[] switchOff;
 	protected int[] switchOn;
-	protected String commandOn;
-	protected String commandOff;
+	protected List< String > commandOns;
+	protected List< String > commandOffs;
 	protected int width;
 	protected boolean on = false;
 	
 	protected RadioCanvas provider;
 	
-	public RadioIconSwitch( int[] switchOn, int[] switchOff, int width, String commandOn, String commandOff ) {
+	public RadioIconSwitch( int[] switchOn, int[] switchOff, int width, List< String > commandOn, List< String > commandOff ) {
 		this.switchOn = switchOn;
 		this.switchOff = switchOff;
-		this.commandOn = commandOn;
-		this.commandOff = commandOff;
+		this.commandOns = commandOn;
+		this.commandOffs = commandOff;
 		this.width = width;
 	}
 	
@@ -75,13 +77,16 @@ public class RadioIconSwitch implements RadioIcon {
 		}
 		Player player = ( Player ) entity;
 		on = !on;
-		String command = ( on ? commandOn : commandOff ).replace( "%player_name%", player.getName() );
-		CommandSender sender = Bukkit.getConsoleSender();
-		if ( command.startsWith( "/" ) ) {
-			command = command.substring( 1 );
-			sender = player;
+		List< String > commands = ( on ? commandOns : commandOffs );
+		for ( String cmd : commands ) {
+			String command = cmd.replace( "%player_name%", player.getName() );
+			CommandSender sender = Bukkit.getConsoleSender();
+			if ( command.startsWith( "/" ) ) {
+				command = command.substring( 1 );
+				sender = player;
+			}
+			Bukkit.dispatchCommand( sender, DependencyManager.parse( player, command ) );
 		}
-		Bukkit.dispatchCommand( sender, DependencyManager.parse( player, command ) );
 		
 		if ( provider != null ) {
 			provider.update( this );

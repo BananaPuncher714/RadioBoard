@@ -2,6 +2,7 @@ package io.github.bananapuncher714.radioboard.providers.canvas;
 
 import java.awt.Image;
 import java.io.File;
+import java.util.List;
 
 import io.github.bananapuncher714.radioboard.util.JetpImageUtil;
 
@@ -26,13 +27,13 @@ public final class RadioIconFactory {
 	 * @param height
 	 * The height in pixels of the switch
 	 * @param commandOn
-	 * A command that is ran when the switch is turned on
+	 * Commands that are ran when the switch is turned on
 	 * @param commandOff
-	 * A command that is ran when the switch is turned off
+	 * Commands that are ran when the switch is turned off
 	 * @return
 	 * A RadioIconSwitch made from all the parameters
 	 */
-	public static RadioIconSwitch constructSwitch( Image on, Image off, int width, int height, String commandOn, String commandOff ) {
+	public static RadioIconSwitch constructSwitch( Image on, Image off, int width, int height, List< String > commandOn, List< String > commandOff ) {
 		Image onImage = JetpImageUtil.toBufferedImage( on ).getScaledInstance( width, height, Image.SCALE_SMOOTH );
 		Image offImage = JetpImageUtil.toBufferedImage( off ).getScaledInstance( width, height, Image.SCALE_SMOOTH );
 		
@@ -73,12 +74,12 @@ public final class RadioIconFactory {
 	 * @param height
 	 * Height of the button
 	 * @param command
-	 * Command that will be executed when pressed
+	 * Commands that will be executed when pressed
 	 * @param buttonDelay
 	 * How long the button stays depressed
 	 * @return
 	 */
-	public static RadioIconButton constructButton( Image clicked, Image unclicked, int width, int height, String command, long buttonDelay ) {
+	public static RadioIconButton constructButton( Image clicked, Image unclicked, int width, int height, List< String > command, long buttonDelay ) {
 		Image onImage = JetpImageUtil.toBufferedImage( clicked ).getScaledInstance( width, height, Image.SCALE_SMOOTH );
 		Image offImage = JetpImageUtil.toBufferedImage( unclicked ).getScaledInstance( width, height, Image.SCALE_SMOOTH );
 		

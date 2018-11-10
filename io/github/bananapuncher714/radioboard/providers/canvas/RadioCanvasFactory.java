@@ -57,8 +57,8 @@ public final class RadioCanvasFactory {
 			if ( type.equalsIgnoreCase( "switch" ) ) {
 				String onImagePath = ( String ) element.get( "on-image" );
 				String offImagePath = ( String ) element.get( "off-image" );
-				String onCommand = ( String ) element.get( "on-command" );
-				String offCommand = ( String ) element.get( "off-command" );
+				List< String > onCommand = ( List< String > ) element.get( "on-command" );
+				List< String > offCommand = ( List< String > ) element.get( "off-command" );
 				
 				File onImage = RadioBoard.getImageFile( onImagePath );
 				File offImage = RadioBoard.getImageFile( offImagePath );
@@ -74,7 +74,7 @@ public final class RadioCanvasFactory {
 			} else if ( type.equalsIgnoreCase( "button" ) ) {
 				String unclickedImagePath = ( String ) element.get( "unclicked-image" );
 				String clickedImagePath = ( String ) element.get( "clicked-image" );
-				String command = ( String ) element.get( "command" );
+				List< String > command = ( List< String > ) element.get( "command" );
 				long delay = ( long ) ( int ) element.get( "button-delay" );
 				
 				File unclickedFile = RadioBoard.getImageFile( unclickedImagePath );
