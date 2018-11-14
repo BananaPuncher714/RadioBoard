@@ -187,7 +187,11 @@ public final class JetpImageUtil {
 						buffer3[ index ] = ( int ) ( buffer3[index  ] + scalar * delta_b );
 					}
 				}
-				map[ y * width + x ] = COLOR_MAP[ red >> 1 << 14 | green >> 1 << 7 | blue >> 1 ];
+				if ( ( rgb >> 24 & 0xFF ) < 0x80 ) {
+					map[ y * width + x ] = 0;
+				} else {
+					map[ y * width + x ] = COLOR_MAP[ red >> 1 << 14 | green >> 1 << 7 | blue >> 1 ];
+				}
 			}
 		}
 		return map;
@@ -272,6 +276,7 @@ public final class JetpImageUtil {
 	    int g2 = overlay >> 8  & 0xFF;
 	    int b2 = overlay       & 0xFF;
 		
+	    int a1 = Math.max( baseColor >> 24 & 0xFF, a2 );
 		int r1 = baseColor >> 16 & 0xFF;
 	    int g1 = baseColor >> 8  & 0xFF;
 	    int b1 = baseColor       & 0xFF;
@@ -283,7 +288,7 @@ public final class JetpImageUtil {
 	    int g = ( int ) ( g1 * unPercent + g2 * percent );
 	    int b = ( int ) ( b1 * unPercent + b2 * percent );
 	    
-	    return r << 16 | g << 8 | b;
+	    return a1 << 24 | r << 16 | g << 8 | b;
 	}
 	
 	public static int mixColors( int color1, int color2 ) {
