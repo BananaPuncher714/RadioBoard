@@ -2,6 +2,7 @@ package io.github.bananapuncher714.radioboard.providers.canvas;
 
 import org.bukkit.entity.Entity;
 
+import io.github.bananapuncher714.radioboard.BoardFrame;
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 
 /**
@@ -43,6 +44,8 @@ public interface RadioIcon {
 	/**
 	 * Called interaction from either a player or a projectile
 	 * 
+	 * @param frame
+	 * The frame that was interacted with, or null if virtual
 	 * @param entity
 	 * The entity, either a player or a projectile
 	 * @param action
@@ -52,7 +55,7 @@ public interface RadioIcon {
 	 * @param y
 	 * The Y coordinate of the click relative to the top left of this icon
 	 */
-	void onClick( Entity entity, DisplayInteract action, int x, int y );
+	void onClick( BoardFrame frame, Entity entity, DisplayInteract action, int x, int y );
 	
 	/**
 	 * Called when the RadioCanvas is disabling itself; Most likely end of use

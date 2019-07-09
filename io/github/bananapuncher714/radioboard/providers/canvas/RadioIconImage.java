@@ -2,6 +2,7 @@ package io.github.bananapuncher714.radioboard.providers.canvas;
 
 import org.bukkit.entity.Entity;
 
+import io.github.bananapuncher714.radioboard.BoardFrame;
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 
 /**
@@ -41,7 +42,7 @@ public class RadioIconImage implements RadioIcon {
 	}
 
 	@Override
-	public void onClick( Entity entity, DisplayInteract action, int x, int y ) {
+	public void onClick( BoardFrame frame, Entity entity, DisplayInteract action, int x, int y ) {
 	}
 
 	@Override

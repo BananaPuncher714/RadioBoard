@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.projectiles.ProjectileSource;
 
+import io.github.bananapuncher714.radioboard.BoardFrame;
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 import io.github.bananapuncher714.radioboard.dependency.DependencyManager;
 
@@ -60,7 +61,7 @@ public class RadioIconSwitch implements RadioIcon {
 	}
 	
 	@Override
-	public void onClick( Entity entity, DisplayInteract action, int x, int y ) {
+	public void onClick( BoardFrame frame, Entity entity, DisplayInteract action, int x, int y ) {
 		if ( action == DisplayInteract.LOOK || action == DisplayInteract.PROJECTILE  ) {
 			return;
 		}

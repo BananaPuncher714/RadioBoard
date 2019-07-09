@@ -2,6 +2,7 @@ package io.github.bananapuncher714.radioboard.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 
@@ -11,6 +12,8 @@ import org.bukkit.entity.ItemFrame;
  * @author BananaPuncher714
  */
 public final class BukkitUtil {
+	private static Material FILLED_MAP;
+	
 	private BukkitUtil() {
 	}
 	
@@ -50,5 +53,15 @@ public final class BukkitUtil {
 	 */
 	public static String getString( Location location ) {
 		return ( location.getWorld().getName() + "%" + location.getX() + "%" + location.getY() + "%" + location.getZ() + "%" + location.getYaw() + "%" + location.getPitch() ).replace( ".", "~" );
+	}
+	
+	public static Material getFilledMap() {
+		if ( FILLED_MAP == null ) {
+			FILLED_MAP = Material.valueOf( "FILLED_MAP" );
+			if ( FILLED_MAP == null ) {
+				FILLED_MAP = Material.valueOf( "MAP" );
+			}
+		}
+		return FILLED_MAP;
 	}
 }

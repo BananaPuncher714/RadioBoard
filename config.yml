@@ -1,1 +1,2 @@
-# Nothing to see here...
+# How long RadioBoard will wait in ticks before updating the board for the player after rejoin/death/change world
+update-delay: 5

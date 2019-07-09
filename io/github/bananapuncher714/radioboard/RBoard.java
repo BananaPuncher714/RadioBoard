@@ -69,19 +69,30 @@ public class RBoard extends MapDisplay {
 	}
 	
 	@Override
-	public void update( Frame frame ) {
+	public void update( Frame frame, RadioObserver... observers ) {
 		saveToDisplay( frame );
+		UUID[] obsArr;
 		cacheLock.lock();
-		if ( observerCache.length == 0 ) {
+		obsArr = observerCache;
+		if ( observerCache.length == 0 && observers.length == 0 ) {
 			cacheLock.unlock();
 			return;
 		}
-		if ( frame.center() ) {
-			handler.display( observerCache, startId, mapWidth, mapHeight, frame.getDisplay(), frame.width );
-		} else {
-			handler.display( observerCache, startId, mapWidth, mapHeight, frame.getDisplay(), frame.width, frame.x, frame.y );
+		if ( observers.length > 0 ) {
+			cacheLock.unlock();
+			obsArr = new UUID[ observers.length ];
+			for ( int index = 0; index < observers.length; index++ ) {
+				obsArr[ index ] = observers[ index ].getUUID();
+			}
 		}
-		cacheLock.unlock();
+		if ( frame.center() ) {
+			handler.display( obsArr, startId, mapWidth, mapHeight, frame.getDisplay(), frame.width );
+		} else {
+			handler.display( obsArr, startId, mapWidth, mapHeight, frame.getDisplay(), frame.width, frame.x, frame.y );
+		}
+		if ( cacheLock.isLocked() ) {
+			cacheLock.unlock();
+		}
 	}
 	
 	@Override

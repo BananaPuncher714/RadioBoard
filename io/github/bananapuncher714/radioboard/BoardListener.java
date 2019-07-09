@@ -137,14 +137,14 @@ public class BoardListener implements Listener {
 		}
 		for ( MapDisplay display : FrameManager.INSTANCE.getDisplays() ) {
 			if ( display.getMapId() == coords.board.getId() ) {
-				display.onClick( entity, DisplayInteract.PROJECTILE, coords.map, coords.x, coords.y );
+				display.onClick( coords.board, entity, DisplayInteract.PROJECTILE, coords.map, coords.x, coords.y );
 			}
 		}
 	}
 	
 	@EventHandler
 	private void onMapInitializeEvent( MapInitializeEvent event ) {
-		short id = event.getMap().getId();
+		short id = ( short ) event.getMap().getId();
 		if ( RadioBoard.getInstance().getPacketHandler().isMapRegistered( id ) ) {
 			event.getMap().getRenderers().clear();
 		}
@@ -175,6 +175,9 @@ public class BoardListener implements Listener {
 
 			// Calculate point of click
 			Location location = VectorUtil.calculateVector( point, normal, originLocation, originDirection );
+			if ( location == null ) {
+				continue;
+			}
 			Location originalLocation = location.clone();
 			
 			// Check to see if it is a clicked frame
@@ -206,6 +209,7 @@ public class BoardListener implements Listener {
 				x = ( int ) ( location.getZ() * 128 );
 				y = 127 - ( int ) ( location.getX() * 128 );
 			} else {
+				// If it's on the floor...
 				x = ( int ) Math.abs( ( location.getX() - ( .5 + .5 * normal.getZ() ) ) * 128 );
 				y = 127 - ( int ) ( location.getY() * 128 );
 			}
@@ -225,7 +229,7 @@ public class BoardListener implements Listener {
 					if ( RadioBoard.getInstance().getCoreBoards().contains( display.getId() ) && !player.hasPermission( "radioboard.board." + display.getId() + ".interact" ) ) {
 						continue;
 					}
-					display.onClick( player, action, coord.map, coord.x, coord.y );
+					display.onClick( coord.board, player, action, coord.map, coord.x, coord.y );
 					return true;
 				}
 			}

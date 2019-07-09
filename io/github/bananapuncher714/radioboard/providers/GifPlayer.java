@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 
 import org.bukkit.entity.Entity;
 
+import io.github.bananapuncher714.radioboard.BoardFrame;
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 import io.github.bananapuncher714.radioboard.api.Frame;
 import io.github.bananapuncher714.radioboard.api.MapDisplay;
@@ -78,7 +79,7 @@ public class GifPlayer extends Thread implements MapDisplayProvider {
 	}
 
 	@Override
-	public void interactAt( Entity entity, DisplayInteract action, int x, int y ) {
+	public void interactAt( BoardFrame frame, Entity entity, DisplayInteract action, int x, int y ) {
 	}
 
 	@Override

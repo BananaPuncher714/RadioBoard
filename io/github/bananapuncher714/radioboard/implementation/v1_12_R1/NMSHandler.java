@@ -6,8 +6,10 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.map.MapView;
 
 import io.github.bananapuncher714.radioboard.RadioBoard;
@@ -59,13 +61,15 @@ public class NMSHandler implements PacketHandler {
 		if ( packet instanceof PacketPlayOutRadioMap ) {
 			return ( ( PacketPlayOutRadioMap ) packet ).packet;
 		} else if ( packet instanceof PacketPlayOutMap ) {
-			try {
-				int id = MAP_FIELDS[ 0 ].getInt( packet );
-				if ( maps[ id ] ) {
-					return null;
+			if ( packet.getClass().getPackage().getName().startsWith( "net.minecraft.server" ) ) {
+				try {
+					int id = MAP_FIELDS[ 0 ].getInt( packet );
+					if ( maps[ id ] ) {
+						return null;
+					}
+				} catch ( IllegalArgumentException | IllegalAccessException e ) {
+					e.printStackTrace();
 				}
-			} catch ( IllegalArgumentException | IllegalAccessException e ) {
-				e.printStackTrace();
 			}
 		}
 		return packet;
@@ -206,5 +210,12 @@ public class NMSHandler implements PacketHandler {
 	@Override
 	public void unregisterMap( int id ) {
 		maps[ id ] = false;
+	}
+	
+	@Override
+	public ItemStack getMapItem( int id ) {
+		ItemStack map = new ItemStack( Material.MAP );
+		map.setDurability( ( short ) id );
+		return map;
 	}
 }

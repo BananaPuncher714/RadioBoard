@@ -12,6 +12,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.ItemStack;
 
+import io.github.bananapuncher714.radioboard.util.BukkitUtil;
+
 /**
  * A Minecraft-world wall of maps for virtual displays
  * 
@@ -54,12 +56,11 @@ public class BoardFrame {
 				ItemFrame fr = getNearestOrSpawnFrameAt( frameLoc );
 				fr.setFacingDirection( frame.getFacing() );
 				frames.add( fr.getUniqueId() );
-				ItemStack mapItem = new ItemStack( Material.MAP );
+				ItemStack mapItem = RadioBoard.getInstance().getPacketHandler().getMapItem( id );
 				
 				// Register this map id
-				RadioBoard.getInstance().getPacketHandler().registerMap( id );
+				RadioBoard.getInstance().getPacketHandler().registerMap( id++ );
 				
-				mapItem.setDurability( ( short ) id++ );
 				fr.setItem( mapItem );
 				
 				frameLoc.add( x, 0, z );

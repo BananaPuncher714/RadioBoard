@@ -1,6 +1,8 @@
 package io.github.bananapuncher714.radioboard.api;
 
 import org.bukkit.entity.Entity;
+
+import io.github.bananapuncher714.radioboard.BoardFrame;
 /**
  * Interface for content that provides {@link Frame} to {@link MapDisplay}
  * 
@@ -18,6 +20,8 @@ public interface MapDisplayProvider {
 	/**
 	 * Interaction with an entity on the board
 	 * 
+	 * @param frame
+	 * The frame interacted with, or null if virtual interaction
 	 * @param entity
 	 * Either a player or a projectile
 	 * @param action
@@ -27,7 +31,7 @@ public interface MapDisplayProvider {
 	 * @param y
 	 * The Y relative to the top left corner
 	 */
-	void interactAt( Entity entity, DisplayInteract action, int x, int y );
+	void interactAt( BoardFrame frame, Entity entity, DisplayInteract action, int x, int y );
 	
 	/**
 	 * Start providing frames for the given display

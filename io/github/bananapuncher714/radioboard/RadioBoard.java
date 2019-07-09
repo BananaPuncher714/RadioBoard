@@ -32,6 +32,8 @@ public class RadioBoard extends JavaPlugin {
 	private static final String FILE_IMAGES = "/images/";
 	private static final String FILE_CANVASES = "/providers/";
 	
+	private static int UPDATE_DELAY = 5;
+	
 	private PacketHandler packetHandler;
 	private TinyProtocol tProtocol;
 	
@@ -84,6 +86,7 @@ public class RadioBoard extends JavaPlugin {
 			FileUtil.saveToFile( getResource( "data/images/shinoa-smirk.png" ), new File( getDataFolder() + FILE_IMAGES + "example/" + "shinoa-smirk.png" ), true );
 		}
 		
+		FileUtil.saveToFile( getResource( "config.yml" ), new File( getDataFolder() + "/config.yml" ), false );
 		loadConfig();
 		
 		playerListener = new PlayerListener( this );
@@ -118,6 +121,12 @@ public class RadioBoard extends JavaPlugin {
 		if ( frameCacheFile.exists() ) {
 			FileConfiguration frameCache = YamlConfiguration.loadConfiguration( frameCacheFile );
 			FrameManager.INSTANCE.loadBoards( frameCache.getConfigurationSection( "frames" ) );
+		}
+		
+		File config = new File( getDataFolder() + "/config.yml" );
+		if ( config.exists() ) {
+			FileConfiguration configConfig = YamlConfiguration.loadConfiguration( config );
+			UPDATE_DELAY = configConfig.getInt( "update-delay", 5 );
 		}
 	}
 	
@@ -254,6 +263,10 @@ public class RadioBoard extends JavaPlugin {
 	 */
 	public static File getCanvasFile( String canvas ) {
 		return new File( INSTANCE.getDataFolder() + FILE_CANVASES + canvas );
+	}
+	
+	public static int getUpdateDelay() {
+		return UPDATE_DELAY;
 	}
 	
 	public static RadioBoard getInstance() {

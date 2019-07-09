@@ -10,6 +10,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.bukkit.entity.Entity;
 
+import io.github.bananapuncher714.radioboard.BoardFrame;
+import io.github.bananapuncher714.radioboard.RadioObserver;
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 import io.github.bananapuncher714.radioboard.api.Frame;
 import io.github.bananapuncher714.radioboard.api.MapDisplay;
@@ -64,7 +66,7 @@ public class RadioCanvas implements MapDisplayProvider {
 	}
 	
 	@Override
-	public void interactAt( Entity entity, DisplayInteract action, int x, int y ) {
+	public void interactAt( BoardFrame frame, Entity entity, DisplayInteract action, int x, int y ) {
 		for ( RadioIcon icon : iconOrdering ) {
 			int[] coords = icons.get( icon );
 			if ( x < coords[ 0 ] || x >= coords[ 0 ] + icon.getWidth() ) {
@@ -74,7 +76,7 @@ public class RadioCanvas implements MapDisplayProvider {
 				continue;
 			}
 			
-			icon.onClick( entity, action, x - coords[ 0 ], y - coords[ 1 ] );
+			icon.onClick( frame, entity, action, x - coords[ 0 ], y - coords[ 1 ] );
 		}
 	}
 	
@@ -100,8 +102,8 @@ public class RadioCanvas implements MapDisplayProvider {
 	 * 
 	 * @param icon
 	 */
-	public void update( RadioIcon icon ) {
-		update( icon, true );
+	public void update( RadioIcon icon, RadioObserver... observers ) {
+		update( icon, true, observers );
 	}
 	
 	/**
@@ -110,7 +112,7 @@ public class RadioCanvas implements MapDisplayProvider {
 	 * @param icon
 	 * @param send
 	 */
-	public void update( RadioIcon icon, boolean send ) {
+	public void update( RadioIcon icon, boolean send, RadioObserver... observers ) {
 		if ( icons.keySet().contains( icon ) ) {
 			// First we calculate the position of the icon
 			int[] globalCoords = icons.get( icon );
@@ -176,7 +178,7 @@ public class RadioCanvas implements MapDisplayProvider {
 			if ( send && display != null ) {
 				// Get the sub-image from the buffer and send it
 				int[] subImage = JetpImageUtil.getSubImage( globalCoords[ 0 ], globalCoords[ 1 ], icon.getWidth(), icon.getHeight(), buffer, width );
-				display.update( new Frame( globalCoords[ 0 ], globalCoords[ 1 ], JetpImageUtil.dither( icon.getWidth(), subImage ), icon.getWidth() ) );
+				display.update( new Frame( globalCoords[ 0 ], globalCoords[ 1 ], JetpImageUtil.dither( icon.getWidth(), subImage ), icon.getWidth() ), observers );
 			}
 		}
 	}

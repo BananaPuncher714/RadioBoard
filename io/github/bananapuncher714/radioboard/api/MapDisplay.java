@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Entity;
 
+import io.github.bananapuncher714.radioboard.BoardFrame;
 import io.github.bananapuncher714.radioboard.RadioObserver;
 
 /**
@@ -139,6 +140,8 @@ public abstract class MapDisplay {
 	/**
 	 * On interact, either a player or a projectile
 	 * 
+	 * @param frame
+	 * The frame that was interacted with, or none if virtual
 	 * @param entity
 	 * The entity that interacts, should only be a projectile if action is {@link DisplayInteract#PROJECTILE}
 	 * @param action
@@ -150,12 +153,12 @@ public abstract class MapDisplay {
 	 * @param y
 	 * The Y relative to the map
 	 */
-	public void onClick( Entity entity, DisplayInteract action, int id, int x, int y ) {
+	public void onClick( BoardFrame frame, Entity entity, DisplayInteract action, int id, int x, int y ) {
 		id -= startId;
 		int height = id / mapWidth;
 		int width = id % mapWidth;
 		// Call the interact at the X and Y starting from the top left corner
-		source.interactAt( entity, action, ( width << 7 ) + x, ( height << 7 ) + y );
+		source.interactAt( frame, entity, action, ( width << 7 ) + x, ( height << 7 ) + y );
 	}
 	
 	/**
@@ -180,6 +183,8 @@ public abstract class MapDisplay {
 	 * 
 	 * @param frame
 	 * An arbitary frame
+	 * @param observers
+	 * An array of arbitrary observers, null to update for all observers
 	 */
-	public abstract void update( Frame frame );
+	public abstract void update( Frame frame, RadioObserver... observers );
 }

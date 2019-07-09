@@ -1,6 +1,7 @@
 # __RadioBoard__
 ![RadioBoard logo](https://i.imgur.com/4ryVOGs.png)
 ## Tutorials:
+**DON'T PUT MAPS ON THE FLOOR!!!**
 For immediate information, check out the [Github wiki](https://github.com/BananaPuncher714/RadioBoard/wiki) and [repo](https://github.com/BananaPuncher714/RadioBoard)!
 
 You can find the javadocs [here](https://bananapuncher714.github.io/RadioBoard/)

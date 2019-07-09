@@ -1,4 +1,4 @@
-package io.github.bananapuncher714.radioboard.implementation.v1_11_R1;
+package io.github.bananapuncher714.radioboard.implementation.v1_13_R2;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -7,36 +7,38 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
 
 import io.github.bananapuncher714.radioboard.RadioBoard;
 import io.github.bananapuncher714.radioboard.api.PacketHandler;
+import io.github.bananapuncher714.radioboard.util.BukkitUtil;
 import io.netty.channel.Channel;
-import net.minecraft.server.v1_11_R1.MapIcon;
-import net.minecraft.server.v1_11_R1.PacketPlayOutMap;
-import net.minecraft.server.v1_11_R1.PlayerConnection;
+import net.minecraft.server.v1_13_R2.MapIcon;
+import net.minecraft.server.v1_13_R2.PacketPlayOutMap;
+import net.minecraft.server.v1_13_R2.PlayerConnection;
 
 public class NMSHandler implements PacketHandler {
 	public static final int PACKET_THRESHOLD_MS = 0;
 
-	private static Field[] MAP_PACKET_FIELDS = new Field[ 9 ];
-
+	private static Field[] MAP_FIELDS = new Field[ 9 ];
+	
 	static {
 		try {
-			MAP_PACKET_FIELDS[ 0 ] = PacketPlayOutMap.class.getDeclaredField( "a" );
-			MAP_PACKET_FIELDS[ 1 ] = PacketPlayOutMap.class.getDeclaredField( "b" );
-			MAP_PACKET_FIELDS[ 2 ] = PacketPlayOutMap.class.getDeclaredField( "c" );
-			MAP_PACKET_FIELDS[ 3 ] = PacketPlayOutMap.class.getDeclaredField( "d" );
-			MAP_PACKET_FIELDS[ 4 ] = PacketPlayOutMap.class.getDeclaredField( "e" );
-			MAP_PACKET_FIELDS[ 5 ] = PacketPlayOutMap.class.getDeclaredField( "f" );
-			MAP_PACKET_FIELDS[ 6 ] = PacketPlayOutMap.class.getDeclaredField( "g" );
-			MAP_PACKET_FIELDS[ 7 ] = PacketPlayOutMap.class.getDeclaredField( "h" );
-			MAP_PACKET_FIELDS[ 8 ] = PacketPlayOutMap.class.getDeclaredField( "i" );
+			MAP_FIELDS[ 0 ] = PacketPlayOutMap.class.getDeclaredField( "a" );
+			MAP_FIELDS[ 1 ] = PacketPlayOutMap.class.getDeclaredField( "b" );
+			MAP_FIELDS[ 2 ] = PacketPlayOutMap.class.getDeclaredField( "c" );
+			MAP_FIELDS[ 3 ] = PacketPlayOutMap.class.getDeclaredField( "d" );
+			MAP_FIELDS[ 4 ] = PacketPlayOutMap.class.getDeclaredField( "e" );
+			MAP_FIELDS[ 5 ] = PacketPlayOutMap.class.getDeclaredField( "f" );
+			MAP_FIELDS[ 6 ] = PacketPlayOutMap.class.getDeclaredField( "g" );
+			MAP_FIELDS[ 7 ] = PacketPlayOutMap.class.getDeclaredField( "h" );
+			MAP_FIELDS[ 8 ] = PacketPlayOutMap.class.getDeclaredField( "i" );
 
-			for ( Field field : MAP_PACKET_FIELDS ) {
+			for ( Field field : MAP_FIELDS ) {
 				field.setAccessible( true );
 			}
 		} catch ( Exception exception ) {
@@ -51,10 +53,10 @@ public class NMSHandler implements PacketHandler {
 			this.packet = packet;
 		}
 	}
-
+	
 	private final Map< UUID, PlayerConnection > playerConnections = new ConcurrentHashMap< UUID, PlayerConnection >();
 	private final Map< UUID, Long > lastUpdated = new ConcurrentHashMap< UUID, Long >();
-	private final boolean[] registeredMaps = new boolean[ Short.MAX_VALUE ];
+	private final boolean[] maps = new boolean[ Short.MAX_VALUE ];
 	
 	@Override
 	public Object onPacketInterceptOut( Player viewer, Object packet ) {
@@ -63,8 +65,8 @@ public class NMSHandler implements PacketHandler {
 		} else if ( packet instanceof PacketPlayOutMap ) {
 			if ( packet.getClass().getPackage().getName().startsWith( "net.minecraft.server" ) ) {
 				try {
-					int id = MAP_PACKET_FIELDS[ 0 ].getInt( packet );
-					if ( registeredMaps[ id ] ) {
+					int id = MAP_FIELDS[ 0 ].getInt( packet );
+					if ( maps[ id ] ) {
 						return null;
 					}
 				} catch ( IllegalArgumentException | IllegalAccessException e ) {
@@ -80,9 +82,6 @@ public class NMSHandler implements PacketHandler {
 		return packet;
 	}
 	
-	/**
-	 * Display the map
-	 */
 	@Override
 	public void display( UUID[] viewers, int map, int width, int height, byte[] rgb, int videoWidth ) {
 		// Get the height of the frame
@@ -135,15 +134,15 @@ public class NMSHandler implements PacketHandler {
 				PacketPlayOutMap packet = new PacketPlayOutMap();
 
 				try {
-					MAP_PACKET_FIELDS[ 0 ].set( packet, mapId );
-					MAP_PACKET_FIELDS[ 1 ].set( packet, ( byte ) 0 );
-					MAP_PACKET_FIELDS[ 2 ].set( packet, false );
-					MAP_PACKET_FIELDS[ 3 ].set( packet, new MapIcon[ 0 ] );
-					MAP_PACKET_FIELDS[ 4 ].set( packet, topX );
-					MAP_PACKET_FIELDS[ 5 ].set( packet, topY );
-					MAP_PACKET_FIELDS[ 6 ].set( packet, xDiff );
-					MAP_PACKET_FIELDS[ 7 ].set( packet, yDiff );
-					MAP_PACKET_FIELDS[ 8 ].set( packet, mapData );
+					MAP_FIELDS[ 0 ].set( packet, mapId );
+					MAP_FIELDS[ 1 ].set( packet, ( byte ) 0 );
+					MAP_FIELDS[ 2 ].set( packet, false );
+					MAP_FIELDS[ 3 ].set( packet, new MapIcon[ 0 ] );
+					MAP_FIELDS[ 4 ].set( packet, topX );
+					MAP_FIELDS[ 5 ].set( packet, topY );
+					MAP_FIELDS[ 6 ].set( packet, xDiff );
+					MAP_FIELDS[ 7 ].set( packet, yDiff );
+					MAP_FIELDS[ 8 ].set( packet, mapData );
 				} catch ( Exception exception ) {
 					exception.printStackTrace();
 				}
@@ -185,41 +184,42 @@ public class NMSHandler implements PacketHandler {
 		}
 	}
 
-
 	@Override
 	public void registerPlayer( Player player ) {
 		playerConnections.put( player.getUniqueId(), ( ( CraftPlayer ) player ).getHandle().playerConnection );
 	}
 
 	@Override
-	public void unregisterPlayer( UUID mapId ) {
-		playerConnections.remove( mapId );
-		RadioBoard.getInstance().getProtocol().removeChannel( mapId );
-	}
-
-	@Override
-	public boolean isMapRegistered( int mapId ) {
-		return registeredMaps[ mapId ];
+	public void unregisterPlayer( UUID uuid ) {
+		playerConnections.remove( uuid );
+		RadioBoard.getInstance().getProtocol().removeChannel( uuid );
 	}
 	
 	@Override
-	public void registerMap( int mapId ) {
-		registeredMaps[ mapId ] = true;
-		MapView view = Bukkit.getMap( ( short ) mapId );
+	public boolean isMapRegistered( int id ) {
+		return maps[ id ];
+	}
+
+	@Override
+	public void registerMap( int id ) {
+		maps[ id ] = true;
+		MapView view = Bukkit.getMap( ( short ) id );
 		if ( view != null ) {
 			view.getRenderers().clear();
 		}
 	}
 
 	@Override
-	public void unregisterMap( int mapId ) {
-		registeredMaps[ mapId ] = false;
+	public void unregisterMap( int id ) {
+		maps[ id ] = false;
 	}
 	
 	@Override
 	public ItemStack getMapItem( int id ) {
-		ItemStack item = new ItemStack( Material.MAP );
-		item.setDurability( ( short ) id );
-		return item;
+		ItemStack map = new ItemStack( Material.FILLED_MAP );
+		MapMeta meta = ( MapMeta ) map.getItemMeta();
+		meta.setMapId( id );
+		map.setItemMeta( meta );
+		return map;
 	}
 }

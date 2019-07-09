@@ -3,6 +3,8 @@ package io.github.bananapuncher714.radioboard.api;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.map.MapView;
 
 /**
  * Interface for basic NMS functions
@@ -56,4 +58,6 @@ public interface PacketHandler {
 	void unregisterMap( int id );
 	void registerPlayer( Player player );
 	void unregisterPlayer( UUID uuid );
+	
+	ItemStack getMapItem( int id );
 }

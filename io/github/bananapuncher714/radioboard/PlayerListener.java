@@ -34,7 +34,7 @@ public class PlayerListener implements Listener {
 				plugin.getPacketHandler().registerPlayer( event.getPlayer() );
 				updateMapsFor( event.getPlayer() );
 			}
-		}, 5 );
+		}, RadioBoard.getUpdateDelay() );
 	}
 
 	@EventHandler
@@ -49,7 +49,7 @@ public class PlayerListener implements Listener {
 			public void run() {
 				updateMapsFor( event.getPlayer() );
 			}
-		}, 5 );
+		}, RadioBoard.getUpdateDelay() );
 	}
 
 	@EventHandler
@@ -59,7 +59,7 @@ public class PlayerListener implements Listener {
 			public void run() {
 				updateMapsFor( event.getPlayer() );
 			}
-		}, 5 );
+		}, RadioBoard.getUpdateDelay() );
 	}
 	
 	protected void updateMapsFor( Player player ) {

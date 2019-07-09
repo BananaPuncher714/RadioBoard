@@ -4,6 +4,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.util.noise.NoiseGenerator;
 import org.bukkit.util.noise.SimplexNoiseGenerator;
 
+import io.github.bananapuncher714.radioboard.BoardFrame;
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
 
 /**
@@ -87,7 +88,7 @@ public class RadioIconCloud extends Thread implements RadioIcon {
 	}
 
 	@Override
-	public void onClick( Entity entity, DisplayInteract action, int x, int y) {
+	public void onClick( BoardFrame frame, Entity entity, DisplayInteract action, int x, int y) {
 	}
 
 	@Override
