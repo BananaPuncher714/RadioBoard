@@ -269,6 +269,10 @@ public class RadioBoard extends JavaPlugin {
 		return UPDATE_DELAY;
 	}
 	
+	public static FrameManager getFrameManager() {
+		return FrameManager.INSTANCE;
+	}
+	
 	public static RadioBoard getInstance() {
 		return INSTANCE;
 	}
