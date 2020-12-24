@@ -15,9 +15,8 @@ import org.bukkit.map.MapView;
 
 import io.github.bananapuncher714.radioboard.RadioBoard;
 import io.github.bananapuncher714.radioboard.api.PacketHandler;
-import io.github.bananapuncher714.radioboard.util.BukkitUtil;
 import io.netty.channel.Channel;
-import net.minecraft.server.EntityPlayer;
+import net.minecraft.server.v1_13_R2.EntityPlayer;
 import net.minecraft.server.v1_13_R2.MapIcon;
 import net.minecraft.server.v1_13_R2.PacketPlayOutMap;
 import net.minecraft.server.v1_13_R2.PlayerConnection;
