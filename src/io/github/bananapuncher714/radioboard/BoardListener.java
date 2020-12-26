@@ -1,5 +1,8 @@
 package io.github.bananapuncher714.radioboard;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
@@ -18,6 +21,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.MapInitializeEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.map.MapView;
 import org.bukkit.util.Vector;
 
 import io.github.bananapuncher714.radioboard.api.DisplayInteract;
@@ -144,9 +148,20 @@ public class BoardListener implements Listener {
 	
 	@EventHandler
 	private void onMapInitializeEvent( MapInitializeEvent event ) {
-		short id = ( short ) event.getMap().getId();
-		if ( RadioBoard.getInstance().getPacketHandler().isMapRegistered( id ) ) {
-			event.getMap().getRenderers().clear();
+		MapView view = event.getMap();
+		try {
+			Method getId = view.getClass().getMethod( "getId" );
+			int id = 0;
+			try {
+				id = ( int ) getId.invoke( view );
+			} catch ( ClassCastException e) {
+				id = ( short ) getId.invoke( view );
+			}
+			if ( RadioBoard.getInstance().getPacketHandler().isMapRegistered( id ) ) {
+				event.getMap().getRenderers().clear();
+			}
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
 		}
 	}
 	
